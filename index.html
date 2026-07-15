@@ -157,6 +157,13 @@
   .parent-box h3:first-child{margin-top:0}
   .parent-box .magic{background:var(--peach);border-radius:12px;padding:10px 14px;margin:6px 0;font-weight:700}
 
+  .prof-chip{background:var(--card);border:2px solid var(--soft);border-radius:999px;
+    padding:6px 14px;font-weight:800;font-size:13px;color:var(--sub);margin-top:10px;cursor:pointer}
+  .prof-input{border:2px solid var(--soft);border-radius:12px;padding:9px 12px;font-size:14px;
+    font-weight:700;font-family:inherit;flex:1;min-width:150px}
+  .code-box{width:100%;margin-top:10px;border:2px dashed var(--gold);border-radius:12px;
+    padding:10px;font-size:12px;font-family:monospace;background:#FFFDF4}
+
   @media (prefers-reduced-motion:reduce){.game-card,.opt{transition:none}}
 </style>
 </head>
@@ -169,6 +176,7 @@
       <div class="logo">🌻</div>
       <h1>Elena's Brain Garden</h1>
       <p>Play, think, make mistakes, grow!</p>
+      <button class="prof-chip" id="profChip">👤 choose player</button>
     </div>
     <div class="garden-strip" id="gardenStrip" title="Open my garden">
       <div class="flowers" id="gardenPreview">🌱</div>
@@ -183,12 +191,12 @@
       <button class="game-card" data-scr="maths">
         <span class="emoji">🎨</span>
         <span><span class="t">Maths Picture Lab</span>
-        <span class="d">Word problems become pictures · Year 1 to Year 6</span></span>
+        <span class="d">Word problems become pictures · 12 NSW Stage 3 topics</span></span>
       </button>
       <button class="game-card" data-scr="words">
         <span class="emoji">📚</span>
         <span><span class="t">Word Wizard</span>
-        <span class="d">Learn powerful words with pictures · Year 3 to Year 6</span></span>
+        <span class="d">140 powerful words with pictures · Tiers 1, 2 &amp; 3</span></span>
       </button>
       <button class="game-card" data-scr="grammar">
         <span class="emoji">✏️</span>
@@ -320,9 +328,9 @@
     </div>
     <div class="streak-line" id="wwStreak"></div>
     <div class="row-btns" style="margin-top:8px">
-      <button class="btn-line" data-wlv="1">Yr 3–4 words</button>
-      <button class="btn-line" data-wlv="2">Yr 5 words</button>
-      <button class="btn-line" data-wlv="3">Yr 6 words</button>
+      <button class="btn-line" data-wlv="1">Tier 1 · everyday</button>
+      <button class="btn-line" data-wlv="2">Tier 2 · academic</button>
+      <button class="btn-line" data-wlv="3">Tier 3 · subjects</button>
     </div>
   </div>
 
@@ -435,14 +443,18 @@
       puzzles (fluid reasoning), listening memory (auditory working memory), vocabulary
       and grammar (verbal comprehension), open conversation cards, and gentle
       no-"wrong" feedback everywhere (fear of mistakes).
-      <h3>📏 Levels follow the NSW syllabus</h3>
-      Maths Picture Lab runs from Level 1 (Year 1–2: adding within 20) up to Level 6
-      (Year 6: percentages, fractions of amounts, area &amp; perimeter, averages, ratio,
-      two-step problems with trickster numbers). Word Wizard has three tiers of
-      essential vocabulary (Yr 3–4, Yr 5, Yr 6). Grammar Garden covers parts of speech
-      up to apostrophes, speech marks, tense consistency and tricky homophones.
-      Levels rise automatically after 3 correct in a row, or you can jump levels with
-      the buttons under each game.
+      <h3>📏 NSW Stage 3 coverage</h3>
+      Maths Picture Lab now works by TOPIC — tap a chip under the game (or play Mixed):
+      multiplication, division, fractions, decimals &amp; percentages, time, length, mass,
+      capacity, area &amp; perimeter, money, chance and patterns. Every problem is generated
+      fresh with new numbers, so each topic has an endless supply. Word Wizard holds
+      140 words in three tiers (Tier 1 everyday, Tier 2 academic, Tier 3 subject words
+      from science, geography, maths and civics). Grammar Garden covers parts of speech
+      up to apostrophes, speech marks and tense consistency.
+      <h3>👤 Players &amp; moving devices</h3>
+      Tap the player chip at the top of the home screen to add players — each gets their
+      own stars, garden and levels on this device. To move progress to a new device or
+      keep a safety copy, open the player screen and use the backup code buttons.
       <h3>🔑 The three magic questions</h3>
       Ask these whenever she's stuck — in the app or with homework:
       <div class="magic">1. "What information is important?"</div>
@@ -459,6 +471,37 @@
       you together — any answer counts. Progress saves automatically on this device.
     </div>
   </div>
+
+  <!-- ═══════ PROFILE ═══════ -->
+  <div id="scr-profile" class="hidden">
+    <div class="topbar"><button class="home-btn" data-scr="menu">← Home</button></div>
+    <div class="menu-head">
+      <div class="logo">👤</div>
+      <h1>Who is playing?</h1>
+      <p>Each player has their own stars, levels and garden (saved on this device)</p>
+    </div>
+    <div class="board" style="text-align:left">
+      <div class="game-list" id="profList"></div>
+      <div class="row-btns" style="justify-content:flex-start">
+        <input id="profName" maxlength="16" placeholder="New player name" class="prof-input">
+        <button class="btn-dark" id="profAdd">+ Add player</button>
+      </div>
+      <hr style="border:none;border-top:2px solid var(--soft);margin:18px 0">
+      <div style="font-size:14px;color:var(--sub);line-height:1.6">
+        <b>📦 Move progress to another device</b><br>
+        Copy the backup code here, then paste it into the app on the new device.
+      </div>
+      <div class="row-btns" style="justify-content:flex-start">
+        <button class="btn-line" id="expBtn">Copy backup code</button>
+        <button class="btn-line" id="impBtn">Paste backup code</button>
+      </div>
+      <textarea id="codeBox" class="code-box hidden" rows="4"></textarea>
+      <div class="row-btns hidden" id="impConfirmRow" style="justify-content:flex-start">
+        <button class="btn-dark" id="impGo">Restore this backup</button>
+      </div>
+      <div style="font-size:12px;color:var(--sub);margin-top:8px" id="profMsg"></div>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -468,9 +511,25 @@ const $=id=>document.getElementById(id);
 const rand=n=>Math.floor(Math.random()*n);
 const pick=a=>a[rand(a.length)];
 function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=rand(i+1);[a[i],a[j]]=[a[j],a[i]];}return a;}
+const PKEY="ebg_currentProfile";
+function curProf(){try{return localStorage.getItem(PKEY)||"";}catch(e){return "";}}
+function getProfiles(){try{return JSON.parse(localStorage.getItem("ebg_profiles")||"[]");}catch(e){return [];}}
+function saveProfiles(p){try{localStorage.setItem("ebg_profiles",JSON.stringify(p));}catch(e){}}
+(function migrateOld(){
+  try{
+    if(!localStorage.getItem("ebg_profiles")&&localStorage.getItem("ebg_stars")!==null){
+      const name="Elena";
+      saveProfiles([name]);localStorage.setItem(PKEY,name);
+      ["stars","solved","mistakes","pzLv","mlLv","wwLv","ggLv","smLv","wwLearned"].forEach(k=>{
+        const v=localStorage.getItem("ebg_"+k);
+        if(v!==null)localStorage.setItem("ebg_"+name+"_"+k,v);
+      });
+    }
+  }catch(e){}
+})();
 const store={
-  get(k,d){try{const v=localStorage.getItem("ebg_"+k);return v===null?d:JSON.parse(v);}catch(e){return d;}},
-  set(k,v){try{localStorage.setItem("ebg_"+k,JSON.stringify(v));}catch(e){}}
+  get(k,d){try{const v=localStorage.getItem("ebg_"+curProf()+"_"+k);return v===null?d:JSON.parse(v);}catch(e){return d;}},
+  set(k,v){try{localStorage.setItem("ebg_"+curProf()+"_"+k,JSON.stringify(v));}catch(e){}}
 };
 let stars=store.get("stars",0), totalSolved=store.get("solved",0), mistakes=store.get("mistakes",0);
 function addStars(n){stars+=n;store.set("stars",stars);refreshStars();}
@@ -489,7 +548,7 @@ const LEARN=["Great trying! Here's the secret:","Good effort! Let's learn the tr
 function fmtNum(v){return Number.isInteger(v)?String(v):v.toFixed(2);}
 
 /* ═══════════ navigation ═══════════ */
-const SCREENS=["menu","puzzle","maths","words","grammar","memory","think","garden","parent"];
+const SCREENS=["menu","puzzle","maths","words","grammar","memory","think","garden","parent","profile"];
 function show(scr){
   SCREENS.forEach(s=>$("scr-"+s).classList.toggle("hidden",s!==scr));
   if(scr==="puzzle")pzNew();
@@ -498,6 +557,7 @@ function show(scr){
   if(scr==="grammar")ggNew();
   if(scr==="memory")smReset();
   if(scr==="garden")renderGarden();
+  if(scr==="profile")renderProfiles();
   refreshStars();
 }
 document.querySelectorAll("[data-scr]").forEach(b=>b.addEventListener("click",()=>show(b.dataset.scr)));
@@ -768,251 +828,502 @@ function barsSVG(vals,mean){
   return s+"</svg>";
 }
 
-/* ═══════════ MATHS PICTURE LAB (levels 1–6) ═══════════ */
+/* ═══════════ MATHS PICTURE LAB · NSW Stage 3 topics ═══════════ */
+/*GEN-TEST-START*/
 const KIDS=["Elena","Max","Mia","Tom","Ruby","Leo","Zoe"];
 const ITEMS=[{name:"apples",emoji:"🍎"},{name:"stickers",emoji:"⭐"},{name:"marbles",emoji:"🔵"},
   {name:"lollies",emoji:"🍬"},{name:"shells",emoji:"🐚"},{name:"strawberries",emoji:"🍓"},
   {name:"cookies",emoji:"🍪"},{name:"balloons",emoji:"🎈"}];
-const YRLBL={1:"Yr 1–2",2:"Yr 2–3",3:"Yr 3–4",4:"Yr 4–5",5:"Yr 5",6:"Yr 6"};
-let mlLv=store.get("mlLv",1),mlStreakN=0,ml=null,mlTries=0,mlDone=false,mlPicked=new Set();
-
-function genMaths(level){
-  const kid=pick(KIDS),friend=pick(KIDS.filter(k=>k!==kid)),it=pick(ITEMS);
-  let p={};
-  const pools={
-    1:["add","sub"],
-    2:["add2","sub2","groups"],
-    3:["groups","shareEven","twostep"],
-    4:["bigAdd","bigSub","times","divRem","moneyChange"],
-    5:["fracOf","decimalMoney","perimeter","area","threeStep"],
-    6:["percent","fracHard","mean","orderOps","ratio"]
-  };
-  const kind=pick(pools[level]);
-  if(kind==="add"){
-    const a=3+rand(7),b=2+rand(6);
-    p={text:`${kid} has [${a}] ${it.name}. ${friend} gives ${kid} [${b}] more. How many ${it.name} does ${kid} have now?`,
-      nums:[a,b],answer:a+b,
-      vis:()=>({html:it.emoji.repeat(a)+" <b style='font-size:22px'>+</b> "+it.emoji.repeat(b),
-        cap:`${a} and ${b} more — count them all!`}),
-      hint1:`First step: start with ${a}, then count on ${b} more.`,
-      hint2:`Count every ${it.emoji} in the picture!`,
-      rule:`${a} + ${b} = ${a+b}. Adding means putting groups together.`};
-  } else if(kind==="sub"){
-    const a=6+rand(9),b=2+rand(Math.min(5,a-2));
-    p={text:`${kid} has [${a}] ${it.name}. ${kid} gives [${b}] to ${friend}. How many are left?`,
-      nums:[a,b],answer:a-b,
-      vis:()=>({html:it.emoji.repeat(a-b)+`<span class="crossed">${it.emoji.repeat(b)}</span>`,
-        cap:`We drew ${a}, then crossed out the ${b} that went away.`}),
-      hint1:`First step: draw ${a}, then cross out ${b}.`,
-      hint2:`Count only the ones NOT crossed out.`,
-      rule:`${a} − ${b} = ${a-b}. The crossed-out ones are gone!`};
-  } else if(kind==="add2"){
-    const a=8+rand(9),b=5+rand(8);
-    p={text:`${kid} collected [${a}] ${it.name} on Saturday and [${b}] on Sunday. How many altogether?`,
-      nums:[a,b],answer:a+b,
-      vis:()=>({html:it.emoji.repeat(a)+" <b style='font-size:22px'>+</b> "+it.emoji.repeat(b),
-        cap:`${a} from Saturday plus ${b} from Sunday.`}),
-      hint1:`First step: start at ${a} and count on ${b} more.`,
-      hint2:`Try ${a} + ${b<=5?b:"10, then take away "+(10-b)} — or just count the picture!`,
-      rule:`${a} + ${b} = ${a+b}. "Altogether" is a clue word for adding.`};
-  } else if(kind==="sub2"){
-    const a=12+rand(9),b=4+rand(7);
-    p={text:`There were [${a}] ${it.name} in the jar. ${kid} ate [${b}]. How many are left?`,
-      nums:[a,b],answer:a-b,
-      vis:()=>({html:it.emoji.repeat(a-b)+`<span class="crossed">${it.emoji.repeat(b)}</span>`,
-        cap:`${a} in the jar, ${b} crossed out.`}),
-      hint1:`"Left" is a clue word for taking away.`,
-      hint2:`Count the ones NOT crossed out.`,
-      rule:`${a} − ${b} = ${a-b}. "How many are left" means subtract.`};
-  } else if(kind==="groups"){
-    const g=2+rand(3),n=2+rand(3);
-    p={text:`${kid} has [${g}] bags. Each bag has [${n}] ${it.name} inside. How many ${it.name} altogether?`,
-      nums:[g,n],answer:g*n,
-      vis:()=>({html:Array.from({length:g},()=>`<span class="grouprow">${it.emoji.repeat(n)}</span>`).join(""),
-        cap:`${g} equal rows with ${n} in each row.`}),
-      hint1:`First step: draw ${g} rows with ${n} in each.`,
-      hint2:`Count row by row: ${Array.from({length:g},(_,i)=>(i+1)*n).join(", ")}.`,
-      rule:`${g} groups of ${n} = ${g*n}. Equal groups means multiplying!`};
-  } else if(kind==="shareEven"){
-    const f=2+rand(2),each=2+rand(3),total=f*each;
-    p={text:`${kid} has [${total}] ${it.name} to share fairly between [${f}] friends. How many does each friend get?`,
-      nums:[total,f],answer:each,
-      vis:()=>({html:shareBoxesSVG(f,each,0,0),cap:`${total} shared into ${f} equal boxes.`}),
-      hint1:`Deal them out one at a time, like cards.`,
-      hint2:`Look at ONE box — how many are in it?`,
-      rule:`${total} ÷ ${f} = ${each}. Sharing fairly means equal groups!`};
-  } else if(kind==="twostep"){
-    const a=4+rand(5),b=3+rand(4),c=2+rand(3),distract=10+rand(20);
-    p={text:`${kid}, who is [${distract}] years old... just kidding! ${kid} has [${a}] ${it.name}, buys [${b}] more, then eats [${c}]. How many are left?`,
-      nums:[a,b,c],hasDistractor:true,answer:a+b-c,
-      vis:()=>({html:it.emoji.repeat(a)+" <b style='font-size:22px'>+</b> "+it.emoji.repeat(b)+
-        `<span class="grouprow">then eat: <span class="crossed">${it.emoji.repeat(c)}</span></span>`,
-        cap:`First join ${a} and ${b}, then cross out ${c}.`}),
-      hint1:`Two steps! First: ${a} + ${b}. Then take away ${c}.`,
-      hint2:`After buying, there were ${a+b}. Now subtract ${c}.`,
-      rule:`Step 1: ${a}+${b}=${a+b}. Step 2: ${a+b}−${c}=${a+b-c}. Some problems need TWO steps — and watch out for trickster numbers you don't need!`};
-  } else if(kind==="bigAdd"){
-    const a=26+rand(42),b=17+rand(12),tens=Math.floor(b/10)*10,ones=b%10;
-    p={text:`${kid}'s class collected [${a}] cans for recycling. Another class collected [${b}]. How many cans altogether?`,
-      nums:[a,b],answer:a+b,
-      vis:()=>({html:ones>0?numberLineSVG([a,a+tens,a+b],["+"+tens,"+"+ones]):numberLineSVG([a,a+b],["+"+tens]),
-        cap:ones>0?`Jump +${tens} first, then +${ones}. Big jumps then small jumps!`:`One big jump: +${tens}.`}),
-      hint1:`Split ${b} into ${tens} and ${ones}. Add the tens first.`,
-      hint2:`${a} + ${tens} = ${a+tens}. Now add ${ones} more.`,
-      rule:`${a} + ${b} = ${a+b}. Splitting into tens and ones makes big adding easy.`};
-  } else if(kind==="bigSub"){
-    const a=52+rand(43),b=17+rand(21),tens=Math.floor(b/10)*10,ones=b%10;
-    p={text:`A book has [${a}] pages. ${kid} has read [${b}] pages. How many pages are left?`,
-      nums:[a,b],answer:a-b,
-      vis:()=>({html:ones>0?numberLineSVG([a,a-tens,a-b],["−"+tens,"−"+ones]):numberLineSVG([a,a-b],["−"+tens]),
-        cap:ones>0?`Jump back −${tens}, then back −${ones}.`:`One big jump back: −${tens}.`}),
-      hint1:`Split ${b} into ${tens} and ${ones}. Take away the tens first.`,
-      hint2:`${a} − ${tens} = ${a-tens}. Now take away ${ones} more.`,
-      rule:`${a} − ${b} = ${a-b}. Jump back by tens, then by ones.`};
-  } else if(kind==="times"){
-    const a=3+rand(7),b=4+rand(6);
-    p={text:`The hall has [${a}] rows of chairs with [${b}] chairs in each row. How many chairs are there?`,
-      nums:[a,b],answer:a*b,
-      vis:()=>({html:arraySVG(a,b),cap:`${a} rows × ${b} in each row — an array!`}),
-      hint1:`Skip count by ${b}: ${b}, ${2*b}, ${3*b}...`,
-      hint2:`It's the same as ${a} × ${b} from your times tables.`,
-      rule:`${a} × ${b} = ${a*b}. Rows × columns — arrays make multiplying easy to see.`};
-  } else if(kind==="divRem"){
-    const f=3+rand(3),each=3+rand(4),r=1+rand(f-1),total=f*each+r;
-    p={text:`${kid} shares [${total}] cards fairly between [${f}] friends. How many cards does EACH friend get?`,
-      nums:[total,f],answer:each,
-      vis:()=>({html:shareBoxesSVG(f,each,0,r),cap:`${f} equal boxes — and some left over in red!`}),
-      hint1:`Deal them out like cards until you can't make another full round.`,
-      hint2:`Look at ONE box. The red ones don't fit fairly.`,
-      rule:`${total} ÷ ${f} = ${each} remainder ${r}. Each friend gets ${each}, and ${r} are left over.`};
-  } else if(kind==="moneyChange"){
-    const a=3+rand(5),b=4+rand(6),pay=20;
-    p={text:`${kid} buys a toy for $[${a}] and a book for $[${b}], and pays with $[${pay}]. How much change?`,
-      nums:[a,b,pay],answer:pay-a-b,fmt:v=>"$"+v,
-      vis:()=>({html:numberLineSVG([pay-a-b,pay-a,pay],["+$"+b,"+$"+a]),
-        cap:`Count UP from the change to $${pay} — or take away twice.`}),
-      hint1:`Two steps: first ${a} + ${b} = ${a+b} dollars spent.`,
-      hint2:`Now $${pay} − $${a+b} = ?`,
-      rule:`Spent: $${a}+$${b}=$${a+b}. Change: $${pay}−$${a+b}=$${pay-a-b}.`};
-  } else if(kind==="fracOf"){
-    const den=pick([2,4]),num=den===2?1:pick([1,3]),k=2+rand(4),N=den*k;
-    p={text:`${kid} has [${N}] ${it.name}. ${kid} gives ${num}/${den} of them to ${friend}. How many is that?`,
-      nums:[N],answer:N/den*num,
-      vis:()=>({html:shareBoxesSVG(den,k,num,0),cap:`${N} split into ${den} equal boxes — ${num} box${num>1?"es are":" is"} green.`}),
-      hint1:`First find 1/${den}: split ${N} into ${den} equal groups.`,
-      hint2:`One group has ${k}. You need ${num} group${num>1?"s":""}.`,
-      rule:`1/${den} of ${N} is ${k}, so ${num}/${den} of ${N} is ${num} × ${k} = ${N/den*num}. Divide by the bottom, times by the top!`};
-  } else if(kind==="decimalMoney"){
-    const price=(4+rand(5))+0.5,pay=10;
-    p={text:`${kid} buys a smoothie for $[${price.toFixed(2)}] and pays with $[${pay}]. How much change?`,
-      nums:[price,pay],answer:pay-price,fmt:v=>"$"+v.toFixed(2),
-      vis:()=>({html:numberLineSVG([price,Math.ceil(price),pay],["+50c","+$"+(pay-Math.ceil(price))]),
-        cap:`Count UP: 50c gets you to $${Math.ceil(price)}, then whole dollars to $${pay}.`}),
-      hint1:`Count up from $${price.toFixed(2)} — first jump 50c to a whole dollar.`,
-      hint2:`$${price.toFixed(2)} + 50c = $${Math.ceil(price)}. Then how many dollars to $${pay}?`,
-      rule:`$${pay} − $${price.toFixed(2)} = $${(pay-price).toFixed(2)}. Counting UP makes change easy.`};
-  } else if(kind==="perimeter"){
-    const l=5+rand(6),w=3+rand(4);
-    p={text:`A garden is [${l}] m long and [${w}] m wide. What is the PERIMETER (all the way around)?`,
-      nums:[l,w],answer:2*(l+w),fmt:v=>v+" m",
-      vis:()=>({html:rectSVG(l,w),cap:`Walk around all four sides: ${l} + ${w} + ${l} + ${w}.`}),
-      hint1:`Perimeter = walk around the edge. Add ALL four sides.`,
-      hint2:`${l} + ${w} = ${l+w}. Now double it!`,
-      rule:`Perimeter = 2 × (${l} + ${w}) = ${2*(l+w)} m. Two lengths + two widths.`};
-  } else if(kind==="area"){
-    const l=4+rand(5),w=3+rand(3);
-    p={text:`A rug is [${l}] m long and [${w}] m wide. What is the AREA (space it covers)?`,
-      nums:[l,w],answer:l*w,fmt:v=>v+" m²",
-      vis:()=>({html:areaSVG(l,w),cap:`Count the square metres — or use rows × columns!`}),
-      hint1:`Area = the number of squares inside.`,
-      hint2:`${w} rows of ${l} squares — that's ${w} × ${l}.`,
-      rule:`Area = ${l} × ${w} = ${l*w} m². Length × width!`};
-  } else if(kind==="threeStep"){
-    const packs=3+rand(3),per=4+rand(4),extra=3+rand(5);
-    p={text:`${kid} buys [${packs}] packs of ${it.name} with [${per}] in each pack, then ${friend} gives ${kid} [${extra}] more. How many altogether?`,
-      nums:[packs,per,extra],answer:packs*per+extra,
-      vis:()=>({html:arraySVG(packs,per)+`<span class="grouprow" style="font-size:24px">+ ${it.emoji.repeat(extra)}</span>`,
-        cap:`${packs} rows of ${per}, plus ${extra} extra.`}),
-      hint1:`Step 1: ${packs} × ${per}. Step 2: add ${extra}.`,
-      hint2:`${packs} × ${per} = ${packs*per}. Now + ${extra}.`,
-      rule:`Step 1: ${packs}×${per}=${packs*per}. Step 2: ${packs*per}+${extra}=${packs*per+extra}. Multiply first, then add.`};
-  } else if(kind==="percent"){
-    const pct=pick([10,25,50]),N=pick([20,40,60,80]);
-    p={text:`A game costs $[${N}]. It's on sale for [${pct}]% off. How many dollars do you SAVE?`,
-      nums:[N,pct],answer:N*pct/100,fmt:v=>"$"+v,
-      vis:()=>({html:grid100SVG(pct),cap:`${pct}% means ${pct} out of every 100 — the green part of the grid.`}),
-      hint1:pct===50?`50% is a HALF.`:pct===25?`25% is a QUARTER (half of a half).`:`10% means divide by 10.`,
-      hint2:pct===50?`Half of ${N} is...?`:pct===25?`Half of ${N} is ${N/2}. Now halve again.`:`${N} ÷ 10 = ?`,
-      rule:`${pct}% of ${N} = ${N*pct/100}. ${pct===50?"50% = half.":pct===25?"25% = quarter: halve it twice.":"10% = divide by 10."}`};
-  } else if(kind==="fracHard"){
-    const den=pick([3,5,8]),k=2+rand(3),N=den*k;
-    const nn=Math.min(2+rand(den-2),den-1);
-    p={text:`In a class of [${N}] students, ${nn}/${den} play soccer. How many students play soccer?`,
-      nums:[N],answer:N/den*nn,
-      vis:()=>({html:shareBoxesSVG(den,k,nn,0),cap:`${N} split into ${den} equal groups of ${k} — ${nn} groups are green.`}),
-      hint1:`Divide by the bottom number first: ${N} ÷ ${den}.`,
-      hint2:`${N} ÷ ${den} = ${k}. Now × ${nn}.`,
-      rule:`${nn}/${den} of ${N}: divide by ${den} (=${k}), multiply by ${nn} (=${N/den*nn}). Bottom divides, top multiplies!`};
-  } else if(kind==="mean"){
-    const m=5+rand(4),d=1+rand(3),vals=shuffle([m-d,m,m+d]);
-    p={text:`${kid} scored [${vals[0]}], [${vals[1]}] and [${vals[2]}] points in three games. What was ${kid}'s AVERAGE (mean) score?`,
-      nums:vals,answer:m,
-      vis:()=>({html:barsSVG(vals,m),cap:`The mean levels the bars out — share the total evenly.`}),
-      hint1:`Add all three scores first.`,
-      hint2:`Total = ${vals[0]+vals[1]+vals[2]}. Now share between 3 games: ÷ 3.`,
-      rule:`Mean = (${vals.join(" + ")}) ÷ 3 = ${vals[0]+vals[1]+vals[2]} ÷ 3 = ${m}. Add them all, divide by how many.`};
-  } else if(kind==="orderOps"){
-    const a=3+rand(5),b=2+rand(3),c=4+rand(4);
-    p={text:`${kid} has [${a}] ${it.name}, then buys [${b}] packs with [${c}] in each pack. How many altogether?`,
-      nums:[a,b,c],answer:a+b*c,
-      vis:()=>({html:`<span class="grouprow" style="font-size:24px">${it.emoji.repeat(a)}</span>`+arraySVG(b,c),
-        cap:`${a} loose ones, plus ${b} rows of ${c}.`}),
-      hint1:`Work out the packs FIRST: ${b} × ${c}.`,
-      hint2:`${b} × ${c} = ${b*c}. Now add the ${a} loose ones.`,
-      rule:`${a} + ${b} × ${c} = ${a} + ${b*c} = ${a+b*c}. Multiplication comes BEFORE addition (order of operations!).`};
-  } else { // ratio
-    const r=2,bl=3,times=2+rand(2),red=r*times;
-    p={text:`${kid} makes bracelets with [${r}] red beads for every [${bl}] blue beads. If ${kid} uses [${red}] red beads, how many blue beads?`,
-      nums:[r,bl,red],answer:bl*times,
-      vis:()=>({html:Array.from({length:times},()=>`<span class="grouprow" style="letter-spacing:1px;font-size:24px">${"🔴".repeat(r)} ${"🔵".repeat(bl)}</span>`).join(""),
-        cap:`Every group has ${r} red and ${bl} blue. ${red} red makes ${times} groups.`}),
-      hint1:`How many GROUPS of ${r} red are in ${red} red?`,
-      hint2:`${red} ÷ ${r} = ${times} groups. Each group has ${bl} blue.`,
-      rule:`${red} red = ${times} groups. Blue = ${times} × ${bl} = ${bl*times}. Ratios grow group by group!`};
-  }
-  p.kind=kind;
-  return p;
+function ctx(){const kid=pick(KIDS),friend=pick(KIDS.filter(k=>k!==kid)),it=pick(ITEMS);return{kid,friend,it};}
+function fmtShort(v){return String(parseFloat(v.toFixed(2)));}
+function fmtMoney(v){return "$"+(Number.isInteger(v)?v:v.toFixed(2));}
+function hhmm(m){m=((m%1440)+1440)%1440;let h=Math.floor(m/60)%24;let hh=h%12;if(hh===0)hh=12;return hh+":"+String(m%60).padStart(2,"0");}
+function ampm(m){return (Math.floor(((m%1440)+1440)%1440/60))<12?"am":"pm";}
+function toHM(m){return hhmm(m)+" "+ampm(m);}
+function durStr(m){const h=Math.floor(m/60),r=m%60;if(h&&r)return h+" h "+r+" min";if(h)return h+" h";return r+" min";}
+function countOnRows(s,e){
+  const rows=[];let cur=s;const toNext=(60-(cur%60))%60;
+  if(toNext&&cur+toNext<=e){rows.push([cur,cur+toNext,"+"+toNext+" min"]);cur+=toNext;}
+  while(cur+60<=e){rows.push([cur,cur+60,"+1 h"]);cur+=60;}
+  if(e>cur)rows.push([cur,e,"+"+(e-cur)+" min"]);
+  return rows.map(r=>`<span class="grouprow" style="font-size:17px;font-weight:800">${toHM(r[0])} → ${toHM(r[1])}  (${r[2]})</span>`).join("");
+}
+function mkOpts(ans){
+  const s=[ans];
+  for(let i=1;i<arguments.length;i++){const c=arguments[i];
+    if(c!==undefined&&c!==null&&!s.some(x=>String(x)===String(c)))s.push(c);}
+  return shuffle(s.slice(0,4));
+}
+function clockSVG(h,m){
+  let s=`<svg width="124" height="124" viewBox="0 0 124 124">`;
+  s+=`<circle cx="62" cy="62" r="56" fill="#fff" stroke="#22343C" stroke-width="3"/>`;
+  for(let i=1;i<=12;i++){const a=i*Math.PI/6;
+    s+=`<text x="${62+46*Math.sin(a)}" y="${62-46*Math.cos(a)+4}" text-anchor="middle" font-size="11" font-weight="800" fill="#22343C">${i}</text>`;}
+  const ma=m*Math.PI/30,ha=((h%12)+m/60)*Math.PI/6;
+  s+=`<line x1="62" y1="62" x2="${62+27*Math.sin(ha)}" y2="${62-27*Math.cos(ha)}" stroke="#22343C" stroke-width="5" stroke-linecap="round"/>`;
+  s+=`<line x1="62" y1="62" x2="${62+40*Math.sin(ma)}" y2="${62-40*Math.cos(ma)}" stroke="#7B6CF6" stroke-width="3.5" stroke-linecap="round"/>`;
+  s+=`<circle cx="62" cy="62" r="3.5" fill="#22343C"/>`;
+  return s+"</svg>";
+}
+function spinnerSVG(cols){
+  const n=cols.length,cx=62,cy=64,r=52;
+  let s=`<svg width="124" height="128" viewBox="0 0 124 128">`;
+  for(let i=0;i<n;i++){const a0=i*2*Math.PI/n-Math.PI/2,a1=(i+1)*2*Math.PI/n-Math.PI/2;
+    s+=`<path d="M ${cx} ${cy} L ${cx+r*Math.cos(a0)} ${cy+r*Math.sin(a0)} A ${r} ${r} 0 0 1 ${cx+r*Math.cos(a1)} ${cy+r*Math.sin(a1)} Z" fill="${cols[i]}" stroke="#fff" stroke-width="2"/>`;}
+  s+=`<circle cx="${cx}" cy="${cy}" r="4" fill="#22343C"/><polygon points="62,1 55,14 69,14" fill="#22343C"/>`;
+  return s+"</svg>";
+}
+function jugSVG(frac,label){
+  const x=26,y=16,w=52,h=96,fh=h*Math.max(0,Math.min(1,frac));
+  let s=`<svg width="130" height="126" viewBox="0 0 130 126">`;
+  s+=`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="7" fill="#fff" stroke="#22343C" stroke-width="2.5"/>`;
+  if(fh>6)s+=`<rect x="${x+3}" y="${y+h-fh+3}" width="${w-6}" height="${fh-6}" rx="4" fill="#38B6E3" opacity="0.8"/>`;
+  s+=`<text x="${x+w+6}" y="${y+10}" font-size="12" font-weight="800" fill="#22343C">${label}</text>`;
+  return s+"</svg>";
+}
+const TOPICS=[
+ {id:"mix",lbl:"🎲 Mixed"},{id:"mult",lbl:"✖️ Multiply"},{id:"div",lbl:"➗ Divide"},
+ {id:"frac",lbl:"🍕 Fractions"},{id:"dec",lbl:"💯 Decimals & %"},{id:"time",lbl:"⏰ Time"},
+ {id:"len",lbl:"📏 Length"},{id:"mass",lbl:"⚖️ Mass"},{id:"cap",lbl:"🥤 Capacity"},
+ {id:"area",lbl:"🟩 Area & Perimeter"},{id:"money",lbl:"💰 Money"},{id:"chance",lbl:"🎯 Chance"},
+ {id:"patt",lbl:"🔢 Patterns"}];
+const GEN={
+mult:[
+()=>{const a=3+rand(7),b=4+rand(6);return{
+ text:`The hall has [${a}] rows of chairs with [${b}] chairs in each row. How many chairs altogether?`,
+ nums:[a,b],answer:a*b,
+ vis:()=>({html:arraySVG(a,b),cap:`${a} rows × ${b} columns — count the array!`}),
+ hint1:`Skip count by ${b}: ${b}, ${2*b}, ${3*b}…`,hint2:`It's ${a} × ${b} from your times tables.`,
+ rule:`${a} × ${b} = ${a*b}. Rows × columns!`};},
+()=>{const {kid,it}=ctx();const a=3+rand(6),b=3+rand(6);return{
+ text:`${kid} buys [${a}] packs of ${it.name} with [${b}] in each pack. How many ${it.name}?`,
+ nums:[a,b],answer:a*b,
+ vis:()=>({html:Array.from({length:a},()=>`<span class="grouprow">${it.emoji.repeat(b)}</span>`).join(""),cap:`${a} equal groups of ${b}.`}),
+ hint1:`Equal groups means multiply.`,hint2:`${a} × ${b} = ?`,
+ rule:`${a} groups of ${b} = ${a*b}.`};},
+()=>{const {kid,it}=ctx();const a=4+rand(26);return{
+ text:`Each box holds [10] ${it.name}. ${kid} has [${a}] boxes. How many ${it.name} altogether?`,
+ nums:[10,a],answer:a*10,opts:mkOpts(a*10,a*100,a+10,a*10+10),
+ vis:()=>({html:`<span class="grouprow" style="font-size:30px;font-weight:900;letter-spacing:0">${a} × 10 = ${a}0</span>`,cap:`× 10 slides every digit one place bigger — one extra zero.`}),
+ hint1:`× 10 means every digit moves one place to the left.`,hint2:`${a} becomes ${a}0.`,
+ rule:`${a} × 10 = ${a*10}. Whole number × 10: add one zero.`};},
+()=>{const a=15+rand(34);return{
+ text:`What is double [${a}]?`,nums:[a],answer:2*a,
+ vis:()=>({html:numberLineSVG([0,a,2*a],["+"+a,"+"+a]),cap:`Two equal jumps of ${a}.`}),
+ hint1:`Double means × 2 — the number plus itself.`,hint2:`${a} + ${a} = ?`,
+ rule:`Double ${a} = ${a} + ${a} = ${2*a}.`};},
+()=>{const {kid,it}=ctx();const a=13+rand(12),b=3+rand(4),t=Math.floor(a/10)*10,o=a-t;return{
+ text:`${kid} fills [${a}] bags with [${b}] ${it.name} in each. How many ${it.name} altogether?`,
+ nums:[a,b],answer:a*b,
+ vis:()=>({html:`<span class="grouprow" style="font-size:20px;font-weight:800;letter-spacing:0">${t} × ${b} = ${t*b}</span><span class="grouprow" style="font-size:20px;font-weight:800;letter-spacing:0">${o} × ${b} = ${o*b}</span><span class="grouprow" style="font-size:20px;font-weight:900;letter-spacing:0">${t*b} + ${o*b} = ?</span>`,cap:`Split ${a} into ${t} + ${o}, multiply each part, then add.`}),
+ hint1:`Split ${a} into ${t} and ${o}.`,hint2:`${t}×${b}=${t*b} and ${o}×${b}=${o*b}. Add them.`,
+ rule:`${a} × ${b} = ${t}×${b} + ${o}×${b} = ${t*b} + ${o*b} = ${a*b}. Split big numbers to multiply!`};},
+()=>{const b=3+rand(6),n=4+rand(5);return{
+ text:`Counting by [${b}]s starting at 0 — what is the [${n}]th number you say?`,
+ nums:[b,n],answer:b*n,
+ vis:()=>({html:numberLineSVG(Array.from({length:n+1},(_,i)=>i*b),Array.from({length:n},()=>"+"+b)),cap:`${n} equal jumps of ${b}.`}),
+ hint1:`Each jump adds ${b}.`,hint2:`That's ${n} × ${b}.`,
+ rule:`${n} jumps of ${b} = ${n} × ${b} = ${b*n}. Skip counting IS multiplying.`};}
+],
+div:[
+()=>{const {kid,it}=ctx();const f=3+rand(4),each=3+rand(6),total=f*each;return{
+ text:`${kid} shares [${total}] ${it.name} fairly between [${f}] friends. How many does each friend get?`,
+ nums:[total,f],answer:each,
+ vis:()=>({html:shareBoxesSVG(f,each,0,0),cap:`${total} dealt into ${f} equal boxes.`}),
+ hint1:`Deal them out one at a time, like cards.`,hint2:`Look inside ONE box.`,
+ rule:`${total} ÷ ${f} = ${each}. Sharing fairly = dividing.`};},
+()=>{const {kid}=ctx();const f=3+rand(3),each=3+rand(5),r=1+rand(f-1),total=f*each+r;return{
+ text:`${kid} shares [${total}] cards between [${f}] friends. How many does EACH friend get?`,
+ nums:[total,f],answer:each,
+ vis:()=>({html:shareBoxesSVG(f,each,0,r),cap:`${f} equal boxes — the red ones are left over.`}),
+ hint1:`Deal until another full round won't fit.`,hint2:`${f} × ${each} = ${f*each}, and ${r} left over.`,
+ rule:`${total} ÷ ${f} = ${each} remainder ${r}.`};},
+()=>{const b=3+rand(6),q=4+rand(6),c=b*q;return{
+ text:`? × [${b}] = [${c}]. What is the missing number?`,
+ nums:[b,c],answer:q,
+ vis:()=>({html:arraySVG(q,b),cap:`How many rows of ${b} make ${c}?`}),
+ hint1:`Division undoes multiplication.`,hint2:`${c} ÷ ${b} = ?`,
+ rule:`${q} × ${b} = ${c}, so ${c} ÷ ${b} = ${q}. Multiplying and dividing are opposites.`};},
+()=>{const a=(2+rand(8))*10;return{
+ text:`[${a}] stickers are packed equally into [10] envelopes. How many in each envelope?`,
+ nums:[a,10],answer:a/10,opts:mkOpts(a/10,a*10,a/10+1,a-10),
+ vis:()=>({html:`<span class="grouprow" style="font-size:28px;font-weight:900;letter-spacing:0">${a} ÷ 10 = ?</span>`,cap:`÷ 10 slides digits one place smaller — drop one zero.`}),
+ hint1:`÷ 10 removes one zero from a tens number.`,hint2:`${a} → ${a/10}.`,
+ rule:`${a} ÷ 10 = ${a/10}.`};},
+()=>{const a=2*(13+rand(35));return{
+ text:`What is half of [${a}]?`,nums:[a],answer:a/2,
+ vis:()=>({html:numberLineSVG([0,a/2,a],["half","half"]),cap:`Half splits ${a} into two equal jumps.`}),
+ hint1:`Half means ÷ 2.`,hint2:`${a} ÷ 2 = ?`,
+ rule:`Half of ${a} = ${a/2}.`};}
+],
+frac:[
+()=>{const {kid,it,friend}=ctx();const den=pick([2,3,4]),nu=1+rand(den-1),k=2+rand(4),N=den*k;return{
+ text:`${kid} has [${N}] ${it.name} and gives ${nu}/${den} of them to ${friend}. How many is that?`,
+ nums:[N],answer:N/den*nu,
+ vis:()=>({html:shareBoxesSVG(den,k,nu,0),cap:`${N} split into ${den} equal groups — ${nu} green.`}),
+ hint1:`Divide by the bottom number: ${N} ÷ ${den}.`,hint2:`One group = ${k}. You need ${nu} groups.`,
+ rule:`${nu}/${den} of ${N}: divide by ${den}, multiply by ${nu} = ${N/den*nu}.`};},
+()=>{const d=pick([4,6,8,10]);return{
+ text:`Fill the blank: 1/2 = ?/[${d}]`,
+ nums:[d],answer:(d/2)+"/"+d,opts:mkOpts((d/2)+"/"+d,(d/2+1)+"/"+d,"1/"+d,(d-1)+"/"+d),
+ vis:()=>({html:fracBarSVG(2,1)+"<br>"+fracBarSVG(d,d/2),cap:`Both bars have the SAME amount shaded.`}),
+ hint1:`Cut every piece of the half-bar into smaller equal pieces.`,hint2:`Half of ${d} pieces is ${d/2}.`,
+ rule:`1/2 = ${d/2}/${d}. Equivalent fractions shade the same amount.`};},
+()=>{const d=pick([5,6,8,10]);const a=1+rand(d-3),b=1+rand(d-a-1);return{
+ text:`What is [${a}]/${d} + [${b}]/${d}?`,
+ nums:[a,b],answer:(a+b)+"/"+d,
+ opts:mkOpts((a+b)+"/"+d,(a+b)+"/"+(2*d),(a+b+1)+"/"+d,Math.max(1,a+b-1)+"/"+d),
+ vis:()=>({html:fracBarSVG(d,a)+"<br>"+fracBarSVG(d,b),cap:`Same-size pieces (${d}ths) — just add the counts.`}),
+ hint1:`The pieces are already the same size.`,hint2:`Add the top numbers: ${a} + ${b}. The bottom stays ${d}.`,
+ rule:`${a}/${d} + ${b}/${d} = ${a+b}/${d}. Same denominator: add the numerators only.`};},
+()=>{const [x,y]=pick([[2,3],[3,4],[4,5],[3,5],[2,4],[2,5]]);return{
+ text:`Which fraction is BIGGER: 1/${x} or 1/${y}?`,
+ nums:[],answer:"1/"+x,opts:mkOpts("1/"+x,"1/"+y),
+ vis:()=>({html:fracBarSVG(x,1)+"<br>"+fracBarSVG(y,1),cap:`Fewer pieces = bigger pieces!`}),
+ hint1:`Cutting a bar into fewer pieces makes each piece bigger.`,hint2:`Compare the two shaded pieces.`,
+ rule:`1/${x} > 1/${y}. The SMALLER the bottom number, the BIGGER each piece.`};},
+()=>{const d=pick([3,4,5]);const w=2+rand(2),n=w*d+1+rand(d-1);return{
+ text:`How many WHOLE pizzas are in [${n}]/${d} of a pizza?`,
+ nums:[n],answer:Math.floor(n/d),
+ vis:()=>({html:Array.from({length:Math.ceil(n/d)},(_,i)=>fracBarSVG(d,Math.min(d,n-i*d))).join("<br>"),cap:`Each full bar is one whole (${d}/${d}).`}),
+ hint1:`Every ${d}/${d} makes one whole pizza.`,hint2:`How many times does ${d} fit into ${n}?`,
+ rule:`${n}/${d} = ${Math.floor(n/d)} wholes and ${n%d}/${d} left over.`};}
+],
+dec:[
+()=>{const pct=pick([10,20,25,50]),N=pick([20,40,60,80,100]);return{
+ text:`Find [${pct}]% of $[${N}].`,nums:[pct,N],answer:N*pct/100,fmt:v=>fmtMoney(v),
+ vis:()=>({html:grid100SVG(pct),cap:`${pct}% means ${pct} out of every 100.`}),
+ hint1:pct===50?"50% is a half.":pct===25?"25% is a quarter (halve it twice).":pct===20?"20% is one fifth.":"10% means ÷ 10.",
+ hint2:`Try ${N} ${pct===50?"÷ 2":pct===25?"÷ 4":pct===20?"÷ 5":"÷ 10"}.`,
+ rule:`${pct}% of ${N} = ${N*pct/100}.`};},
+()=>{const {kid}=ctx();const a=2+rand(4)+pick([0.5,0]),b=1+rand(4)+pick([0.5,0.5,0]);const tot=a+b;return{
+ text:`${kid} buys a drink for $[${a.toFixed(2)}] and a snack for $[${b.toFixed(2)}]. What is the total cost?`,
+ nums:[a,b],answer:tot,fmt:v=>"$"+v.toFixed(2),
+ vis:()=>({html:numberLineSVG([0,a,tot],["+$"+a.toFixed(2),"+$"+b.toFixed(2)]),cap:`Add the whole dollars first, then the cents.`}),
+ hint1:`Add the whole dollars first.`,hint2:`Then the cents: 50c + 50c makes $1.`,
+ rule:`$${a.toFixed(2)} + $${b.toFixed(2)} = $${tot.toFixed(2)}.`};},
+()=>{const price=3+rand(6)+0.5,pay=pick([10,20]);return{
+ text:`A toy costs $[${price.toFixed(2)}]. You pay with $[${pay}]. How much change do you get?`,
+ nums:[price,pay],answer:pay-price,fmt:v=>"$"+v.toFixed(2),
+ vis:()=>({html:numberLineSVG([price,Math.ceil(price),pay],["+50c","+$"+(pay-Math.ceil(price))]),cap:`Count UP from the price to $${pay}.`}),
+ hint1:`Jump 50c to reach a whole dollar first.`,hint2:`Then whole dollars up to $${pay}.`,
+ rule:`$${pay} − $${price.toFixed(2)} = $${(pay-price).toFixed(2)}. Counting up makes change easy.`};},
+()=>{const w=3+rand(6),t=1+rand(8);const v=w+t/10;const ans=t>=5?w+1:w;return{
+ text:`Round [${v.toFixed(1)}] to the nearest whole number.`,
+ nums:[v],answer:ans,opts:mkOpts(ans,ans===w?w+1:w,w+2,w-1>0?w-1:w+3),
+ vis:()=>({html:numberLineSVG([w,v,w+1],["",""]),cap:`Is ${v.toFixed(1)} closer to ${w} or to ${w+1}?`}),
+ hint1:`Look at the tenths digit: it's ${t}.`,hint2:`5 or more rounds UP; 4 or less stays DOWN.`,
+ rule:`${v.toFixed(1)} rounds to ${ans} — the tenths digit ${t} is ${t>=5?"5 or more, so round up":"less than 5, so round down"}.`};},
+()=>{const w=2+rand(6),d1=2+rand(8),c=1+rand(9);const A=(w+d1/10).toFixed(1),B=(w+(d1-1)/10+c/100).toFixed(2);return{
+ text:`Which number is BIGGER: ${A} or ${B}?`,
+ nums:[],answer:A,opts:mkOpts(A,B),
+ vis:()=>({html:numberLineSVG([parseFloat(B),parseFloat(A)],[""]),cap:`Compare the tenths first: .${d1} beats .${d1-1}.`}),
+ hint1:`Line up the decimal points. Compare tenths first.`,hint2:`${d1} tenths beats ${d1-1} tenths — extra hundredths can't catch up.`,
+ rule:`${A} > ${B}. MORE digits does not mean bigger — compare place by place.`};}
+],
+time:[
+()=>{const h=1+rand(12),m=pick([0,15,30,45]);const mm=String(m).padStart(2,"0");const ans=h+":"+mm;
+ return{
+ text:`What time does this clock show?`,
+ nums:[],answer:ans,
+ opts:mkOpts(ans,(h%12)+1+":"+mm,h+":"+String((m+15)%60).padStart(2,"0"),(h===1?12:h-1)+":"+mm),
+ vis:()=>({html:clockSVG(h,m),cap:`Short hand = hours · long hand = minutes.`}),
+ hint1:`The SHORT hand points to the hour.`,hint2:`For the long hand, each clock number means 5 minutes.`,
+ rule:`The clock shows ${ans} — short hand at ${h}, long hand at ${m} minutes.`};},
+()=>{const s=9*60+30*rand(10);const dur=45+15*rand(10);const e=s+dur;return{
+ text:`Soccer practice starts at [${hhmm(s)}] ${ampm(s)} and finishes at [${hhmm(e)}] ${ampm(e)}. How long is practice?`,
+ nums:[hhmm(s),hhmm(e)],answer:durStr(dur),
+ opts:mkOpts(durStr(dur),durStr(dur+15),durStr(Math.max(15,dur-15)),durStr(dur+30)),
+ vis:()=>({html:countOnRows(s,e),cap:`Count UP from the start in easy jumps.`}),
+ hint1:`Count UP from the start time.`,hint2:`Jump to the next o'clock first, then count whole hours.`,
+ rule:`From ${toHM(s)} to ${toHM(e)} is ${durStr(dur)}.`};},
+()=>{const h=13+rand(11),m=pick([0,15,30,45]);const tot=h*60+m;const t24=String(h).padStart(2,"0")+":"+String(m).padStart(2,"0");return{
+ text:`The airport board shows [${t24}]. What time is that on a normal 12-hour clock?`,
+ nums:[t24],answer:toHM(tot),
+ opts:mkOpts(toHM(tot),toHM(tot-60),toHM(tot+60),(h-12)+":"+String(m).padStart(2,"0")+" am"),
+ vis:()=>({html:`<span class="grouprow" style="font-size:24px;font-weight:900;letter-spacing:0">${t24} → ${h} − 12 = ${h-12} → ${toHM(tot)}</span>`,cap:`After 12:59, subtract 12 and say "pm".`}),
+ hint1:`Board numbers 13–23 mean afternoon or evening.`,hint2:`${h} − 12 = ${h-12}, and it becomes "pm".`,
+ rule:`${t24} = ${toHM(tot)}. For 24-hour times past 12, subtract 12 and add pm.`};},
+()=>{const s=17*60+10*rand(12);const dur=80+5*rand(12);const e=s+dur;return{
+ text:`A movie starts at [${hhmm(s)}] ${ampm(s)} and runs for [${dur}] minutes. What time does it finish?`,
+ nums:[hhmm(s),dur],answer:toHM(e),
+ opts:mkOpts(toHM(e),toHM(e+10),toHM(e-10),toHM(e+30)),
+ vis:()=>({html:countOnRows(s,e),cap:`Add the time on in easy jumps.`}),
+ hint1:`${dur} minutes = 1 hour and ${dur-60} minutes.`,hint2:`Add 1 hour first, then the extra ${dur-60} minutes.`,
+ rule:`${toHM(s)} + ${durStr(dur)} = ${toHM(e)}.`};},
+()=>{const h=1+rand(3),r=pick([15,30,45]);const m=h*60+r;return{
+ text:`[${m}] minutes is the same as how many hours and minutes?`,
+ nums:[m],answer:h+" h "+r+" min",
+ opts:mkOpts(h+" h "+r+" min",(h+1)+" h "+r+" min",h+" h "+(r===15?45:15)+" min",(h>1?h-1:h+2)+" h "+r+" min"),
+ vis:()=>{const pts=[];for(let i=0;i<=h;i++)pts.push(60*i);pts.push(m);
+   return{html:numberLineSVG(pts,Array(h).fill("+60").concat(["+"+r])),cap:`Every 60 minutes makes 1 hour (numbers shown in minutes).`};},
+ hint1:`How many whole 60s fit into ${m}?`,hint2:`${h} × 60 = ${h*60}, with ${r} minutes left over.`,
+ rule:`${m} min = ${h} h ${r} min, because ${h}×60 + ${r} = ${m}.`};},
+()=>{const gap=pick([15,20,30]);const s=540;const n=3+rand(2);const e=s+gap*(n-1);return{
+ text:`The first ferry leaves at [9:00] am, then one leaves every [${gap}] minutes. What time does ferry number [${n}] leave?`,
+ nums:["9:00",gap,n],answer:toHM(e),
+ opts:mkOpts(toHM(e),toHM(e+gap),toHM(e-gap),toHM(e+60)),
+ vis:()=>({html:Array.from({length:n},(_,i)=>`<span class="grouprow" style="font-size:17px;font-weight:800">⛴️ Ferry ${i+1} · ${toHM(s+gap*i)}</span>`).join(""),cap:`Each ferry is ${gap} minutes after the one before.`}),
+ hint1:`Ferry ${n} comes after ${n-1} gaps.`,hint2:`${n-1} × ${gap} = ${(n-1)*gap} minutes after 9:00.`,
+ rule:`Ferry ${n} leaves at ${toHM(e)} — that's ${n-1} gaps of ${gap} minutes.`};}
+],
+len:[
+()=>{const cm=(2+rand(8))*100+pick([0,50]);const m=cm/100;return{
+ text:`A rope is [${cm}] cm long. How many metres is that?`,
+ nums:[cm],answer:m,fmt:v=>fmtShort(v)+" m",opts:mkOpts(m,m*10,m/10,m+1),
+ vis:()=>({html:`<span class="grouprow" style="font-size:22px;font-weight:900;letter-spacing:0">100 cm = 1 m</span><span class="grouprow" style="font-size:22px;font-weight:900;letter-spacing:0">${cm} cm = ${cm} ÷ 100</span>`,cap:`Divide by 100 to change cm into m.`}),
+ hint1:`100 cm make 1 metre.`,hint2:`${cm} ÷ 100 = ?`,
+ rule:`${cm} cm = ${fmtShort(m)} m. cm → m: divide by 100.`};},
+()=>{const km=pick([2,2.5,3,4,4.5,5]);const ans=km*1000;return{
+ text:`The walk to school is [${fmtShort(km)}] km. How many metres is that?`,
+ nums:[km],answer:ans,fmt:v=>v+" m",opts:mkOpts(ans,km*100,ans+500,ans-500),
+ vis:()=>({html:`<span class="grouprow" style="font-size:22px;font-weight:900;letter-spacing:0">1 km = 1000 m</span><span class="grouprow" style="font-size:22px;font-weight:900;letter-spacing:0">${fmtShort(km)} km = ${fmtShort(km)} × 1000</span>`,cap:`Multiply by 1000 to change km into m.`}),
+ hint1:`1 km = 1000 m.`,hint2:`${fmtShort(km)} × 1000 = ?`,
+ rule:`${fmtShort(km)} km = ${ans} m. km → m: multiply by 1000.`};},
+()=>{const mm=(3+rand(9))*10+5;const ans=mm/10;return{
+ text:`A beetle is [${mm}] mm long. How many centimetres is that?`,
+ nums:[mm],answer:ans,fmt:v=>fmtShort(v)+" cm",opts:mkOpts(ans,ans*10,ans/10,ans+1),
+ vis:()=>({html:`<span class="grouprow" style="font-size:22px;font-weight:900;letter-spacing:0">10 mm = 1 cm</span><span class="grouprow" style="font-size:22px;font-weight:900;letter-spacing:0">${mm} mm = ${mm} ÷ 10</span>`,cap:`Divide by 10 to change mm into cm.`}),
+ hint1:`10 mm make 1 cm.`,hint2:`${mm} ÷ 10 = ?`,
+ rule:`${mm} mm = ${fmtShort(ans)} cm. mm → cm: divide by 10.`};},
+()=>{const {kid}=ctx();const mt=1+rand(2),cm=15+5*rand(15);const ans=mt*100+cm;return{
+ text:`${kid} joins a ribbon [${mt}] m long to another ribbon [${cm}] cm long. How long is it altogether, in centimetres?`,
+ nums:[mt,cm],answer:ans,fmt:v=>v+" cm",opts:mkOpts(ans,mt+cm,ans+100,ans-100),
+ vis:()=>({html:numberLineSVG([0,mt*100,ans],["+"+(mt*100)+" cm","+"+cm+" cm"]),cap:`Change metres into cm first, then add.`}),
+ hint1:`Make the units MATCH first: ${mt} m = ${mt*100} cm.`,hint2:`${mt*100} + ${cm} = ?`,
+ rule:`${mt} m + ${cm} cm = ${mt*100} + ${cm} = ${ans} cm. Same units before adding!`};},
+()=>{const l=5+rand(6),w=3+rand(4);return{
+ text:`A garden bed is [${l}] m long and [${w}] m wide. What is its PERIMETER (all the way around)?`,
+ nums:[l,w],answer:2*(l+w),fmt:v=>v+" m",
+ vis:()=>({html:rectSVG(l,w),cap:`Walk all four sides: ${l} + ${w} + ${l} + ${w}.`}),
+ hint1:`Perimeter = the walk around the edge. Add ALL four sides.`,hint2:`${l} + ${w} = ${l+w}. Now double it.`,
+ rule:`Perimeter = 2 × (${l} + ${w}) = ${2*(l+w)} m.`};}
+],
+mass:[
+()=>{const kg=pick([1.5,2,2.5,3,3.5]);const ans=kg*1000;return{
+ text:`A bag of rice weighs [${fmtShort(kg)}] kg. How many grams is that?`,
+ nums:[kg],answer:ans,fmt:v=>v+" g",opts:mkOpts(ans,kg*100,kg*10000,ans+500),
+ vis:()=>({html:`<span class="grouprow" style="font-size:22px;font-weight:900;letter-spacing:0">1 kg = 1000 g</span><span class="grouprow" style="font-size:22px;font-weight:900;letter-spacing:0">${fmtShort(kg)} kg = ${fmtShort(kg)} × 1000</span>`,cap:`Multiply by 1000 to change kg into g.`}),
+ hint1:`1 kg = 1000 g.`,hint2:`${fmtShort(kg)} × 1000 = ?`,
+ rule:`${fmtShort(kg)} kg = ${ans} g. kg → g: multiply by 1000.`};},
+()=>{const {kid}=ctx();const a=pick([250,350,400,450]),b=pick([550,600,750,850]);const ans=a+b;return{
+ text:`${kid} puts [${a}] g of apples and [${b}] g of bananas in a basket. What is the total mass?`,
+ nums:[a,b],answer:ans,fmt:v=>v+" g",opts:mkOpts(ans,ans+100,ans-100,ans+50),
+ vis:()=>({html:numberLineSVG([0,a,ans],["+"+a+" g","+"+b+" g"]),cap:`Two jumps on the scale.`}),
+ hint1:`Add the hundreds first.`,hint2:`${a} + ${b} = ?`,
+ rule:`${a} g + ${b} g = ${ans} g${ans>=1000?" (that's "+fmtShort(ans/1000)+" kg!)":""}.`};},
+()=>{const kgs=pick([1.5,2,2.5]);const g=kgs*1000+pick([-200,-100,100,200]);const A=g+" g",B=fmtShort(kgs)+" kg";const ans=g>kgs*1000?A:B;return{
+ text:`Which is HEAVIER: [${g}] g or [${fmtShort(kgs)}] kg?`,
+ nums:[g,kgs],answer:ans,opts:mkOpts(ans,ans===A?B:A),
+ vis:()=>({html:`<span class="grouprow" style="font-size:22px;font-weight:900;letter-spacing:0">${fmtShort(kgs)} kg = ${kgs*1000} g</span><span class="grouprow" style="font-size:22px;font-weight:900;letter-spacing:0">${g} g  vs  ${kgs*1000} g</span>`,cap:`Change kg into g first, THEN compare.`}),
+ hint1:`Make the units match: 1 kg = 1000 g.`,hint2:`${fmtShort(kgs)} kg = ${kgs*1000} g. Now compare with ${g} g.`,
+ rule:`${fmtShort(kgs)} kg = ${kgs*1000} g, so ${ans} is heavier.`};},
+()=>{const kg=1+rand(3);const jars=pick([4,5,8,10]);const each=kg*1000/jars;return{
+ text:`[${kg}] kg of flour is shared equally into [${jars}] jars. How many grams go in each jar?`,
+ nums:[kg,jars],answer:each,fmt:v=>v+" g",opts:mkOpts(each,each*10,each+50,each>50?each-50:each+100),
+ vis:()=>({html:shareBoxesSVG(jars,3,0,0),cap:`${kg*1000} g split into ${jars} equal jars.`}),
+ hint1:`Change kg to grams first: ${kg} kg = ${kg*1000} g.`,hint2:`${kg*1000} ÷ ${jars} = ?`,
+ rule:`${kg} kg = ${kg*1000} g, and ${kg*1000} ÷ ${jars} = ${each} g per jar.`};}
+],
+cap:[
+()=>{const L=pick([1.5,2,2.5,3,4]);const ans=L*1000;return{
+ text:`A juice bottle holds [${fmtShort(L)}] litres. How many millilitres is that?`,
+ nums:[L],answer:ans,fmt:v=>v+" mL",opts:mkOpts(ans,L*100,ans+500,ans-500),
+ vis:()=>({html:jugSVG(1,fmtShort(L)+" L"),cap:`1 L = 1000 mL, so multiply by 1000.`}),
+ hint1:`1 L = 1000 mL.`,hint2:`${fmtShort(L)} × 1000 = ?`,
+ rule:`${fmtShort(L)} L = ${ans} mL. L → mL: multiply by 1000.`};},
+()=>{const fill=600+200*rand(6);const ans=2000-fill;return{
+ text:`A [2] L jug already has [${fill}] mL of water in it. How much MORE water is needed to fill it?`,
+ nums:[2,fill],answer:ans,fmt:v=>v+" mL",opts:mkOpts(ans,fill,ans+200,ans-200>0?ans-200:ans+400),
+ vis:()=>({html:jugSVG(fill/2000,"2 L"),cap:`The jug holds 2000 mL — the blue part is ${fill} mL.`}),
+ hint1:`2 L = 2000 mL.`,hint2:`${2000} − ${fill} = ?`,
+ rule:`2 L = 2000 mL, and 2000 − ${fill} = ${ans} mL more.`};},
+()=>{const {kid}=ctx();const a=pick([250,500,750]),b=pick([250,500,750,1250]);const ans=a+b;return{
+ text:`${kid} mixes [${a}] mL of juice with [${b}] mL of soda water. How much drink is that altogether?`,
+ nums:[a,b],answer:ans,fmt:v=>v+" mL",opts:mkOpts(ans,ans+250,ans-250>0?ans-250:ans+500,ans+100),
+ vis:()=>({html:numberLineSVG([0,a,ans],["+"+a,"+"+b]),cap:`Pour them together on the number line.`}),
+ hint1:`Add the two amounts.`,hint2:`${a} + ${b} = ?`,
+ rule:`${a} + ${b} = ${ans} mL${ans>=1000?" — that's "+fmtShort(ans/1000)+" L!":""}.`};},
+()=>{const [L,cups]=pick([[1.5,5],[2,4],[2,5],[1,4],[3,5],[2.5,5]]);const ans=L*1000/cups;return{
+ text:`[${fmtShort(L)}] L of lemonade is poured equally into [${cups}] cups. How many mL in each cup?`,
+ nums:[L,cups],answer:ans,fmt:v=>v+" mL",opts:mkOpts(ans,ans*10,ans+50,ans>100?ans-100:ans+100),
+ vis:()=>({html:shareBoxesSVG(cups,3,0,0),cap:`${L*1000} mL split into ${cups} equal cups.`}),
+ hint1:`Change litres to mL first: ${fmtShort(L)} L = ${L*1000} mL.`,hint2:`${L*1000} ÷ ${cups} = ?`,
+ rule:`${fmtShort(L)} L = ${L*1000} mL, and ${L*1000} ÷ ${cups} = ${ans} mL per cup.`};}
+],
+area:[
+()=>{const l=4+rand(5),w=3+rand(3);return{
+ text:`A rug is [${l}] m long and [${w}] m wide. What is its AREA (the space it covers)?`,
+ nums:[l,w],answer:l*w,fmt:v=>v+" m²",
+ vis:()=>({html:areaSVG(l,w),cap:`Count the square metres — or multiply rows × columns.`}),
+ hint1:`Area = the number of squares inside.`,hint2:`${w} rows of ${l} squares = ${w} × ${l}.`,
+ rule:`Area = ${l} × ${w} = ${l*w} m². Length × width.`};},
+()=>{const l=5+rand(6),w=3+rand(4);return{
+ text:`A pool is [${l}] m long and [${w}] m wide. What is its PERIMETER?`,
+ nums:[l,w],answer:2*(l+w),fmt:v=>v+" m",
+ vis:()=>({html:rectSVG(l,w),cap:`Add all four sides.`}),
+ hint1:`Perimeter = distance all the way around.`,hint2:`(${l} + ${w}) × 2 = ?`,
+ rule:`Perimeter = 2 × (${l} + ${w}) = ${2*(l+w)} m.`};},
+()=>{const w=3+rand(4),l=w+2+rand(4);const ar=l*w;return{
+ text:`A rectangle has an AREA of [${ar}] m². Its length is [${l}] m. How wide is it?`,
+ nums:[ar,l],answer:w,fmt:v=>v+" m",
+ vis:()=>({html:areaSVG(l,w),cap:`${ar} squares arranged in rows of ${l}.`}),
+ hint1:`Area = length × width, so width = area ÷ length.`,hint2:`${ar} ÷ ${l} = ?`,
+ rule:`Width = ${ar} ÷ ${l} = ${w} m. Dividing undoes multiplying!`};},
+()=>{const s=4+rand(6);return{
+ text:`A square sandpit has sides [${s}] m long. What is its perimeter?`,
+ nums:[s],answer:4*s,fmt:v=>v+" m",
+ vis:()=>({html:rectSVG(s,s),cap:`A square has FOUR equal sides.`}),
+ hint1:`All four sides of a square are the same.`,hint2:`4 × ${s} = ?`,
+ rule:`Perimeter of a square = 4 × ${s} = ${4*s} m.`};}
+],
+money:[
+()=>{const {kid}=ctx();const a=3+rand(6),b=4+rand(7);return{
+ text:`${kid} buys a toy for $[${a}] and a book for $[${b}], paying with $[20]. How much change?`,
+ nums:[a,b,20],answer:20-a-b,fmt:v=>fmtMoney(v),
+ vis:()=>({html:numberLineSVG([20-a-b,20-a,20],["+$"+b,"+$"+a]),cap:`Count UP from the change to $20 — or subtract twice.`}),
+ hint1:`Two steps: first find the total spent: ${a} + ${b}.`,hint2:`$20 − $${a+b} = ?`,
+ rule:`Spent $${a}+$${b}=$${a+b}. Change: $20 − $${a+b} = $${20-a-b}.`};},
+()=>{const per=2+rand(7),n=2+rand(4),cost=per*n;return{
+ text:`[${n}] pens cost $[${cost}] in total. How much does ONE pen cost?`,
+ nums:[n,cost],answer:per,fmt:v=>fmtMoney(v),
+ vis:()=>({html:shareBoxesSVG(n,per,0,0),cap:`$${cost} shared equally between ${n} pens.`}),
+ hint1:`Share the total cost equally.`,hint2:`${cost} ÷ ${n} = ?`,
+ rule:`$${cost} ÷ ${n} = $${per} each. Total ÷ how many = unit price.`};},
+()=>{const {kid}=ctx();const per=pick([4,5,6,8,10]),weeks=4+rand(6);const need=per*weeks;return{
+ text:`${kid} saves $[${per}] every week for a game that costs $[${need}]. How many weeks will it take?`,
+ nums:[per,need],answer:weeks,fmt:v=>v+" weeks",
+ vis:()=>({html:numberLineSVG(Array.from({length:weeks+1},(_,i)=>i*per),Array.from({length:weeks},()=>"+$"+per)),cap:`One jump of $${per} for every week.`}),
+ hint1:`How many $${per}s make $${need}?`,hint2:`${need} ÷ ${per} = ?`,
+ rule:`$${need} ÷ $${per} = ${weeks} weeks of saving.`};},
+()=>{const price=pick([20,40,60,80]),pct=pick([10,25,50]);const save=price*pct/100;return{
+ text:`A scooter costs $[${price}]. It's on sale with [${pct}]% OFF. What is the SALE price?`,
+ nums:[price,pct],answer:price-save,fmt:v=>fmtMoney(v),
+ vis:()=>({html:grid100SVG(pct),cap:`You save the green part (${pct}%) and pay the rest.`}),
+ hint1:`First find ${pct}% of $${price} — that's the saving.`,hint2:`Saving = $${save}. Now $${price} − $${save}.`,
+ rule:`${pct}% of ${price} = ${save}, so the sale price is $${price} − $${save} = $${price-save}.`};},
+()=>{const price=2+rand(6)+0.5;return{
+ text:`An ice cream costs $[${price.toFixed(2)}]. You pay with $[10]. How much change?`,
+ nums:[price,10],answer:10-price,fmt:v=>"$"+v.toFixed(2),
+ vis:()=>({html:numberLineSVG([price,Math.ceil(price),10],["+50c","+$"+(10-Math.ceil(price))]),cap:`Count UP: 50c to a whole dollar, then dollars to $10.`}),
+ hint1:`Jump 50c first to reach a whole dollar.`,hint2:`Then count the whole dollars up to $10.`,
+ rule:`$10 − $${price.toFixed(2)} = $${(10-price).toFixed(2)}.`};}
+],
+chance:[
+()=>{const n=pick([4,5,6,8]),k=1+rand(n-1);const cols=Array.from({length:n},(_,i)=>i<k?"#FF6B6B":"#38B6E3");return{
+ text:`This spinner has [${n}] equal parts and [${k}] of them are red. What is the chance of landing on RED?`,
+ nums:[n,k],answer:k+"/"+n,
+ opts:mkOpts(k+"/"+n,(n-k)+"/"+n,k+"/"+(n+1),"1/"+n),
+ vis:()=>({html:spinnerSVG(shuffle(cols)),cap:`${k} red parts out of ${n} equal parts.`}),
+ hint1:`Chance = winning parts out of ALL the parts.`,hint2:`${k} red out of ${n} parts.`,
+ rule:`Chance of red = ${k}/${n} — ${k} red parts out of ${n} equal parts.`};},
+()=>{const r=2+rand(3),b=2+rand(3);const tot=r+b;return{
+ text:`A bag has [${r}] red and [${b}] blue marbles. You pull one out without looking. What is the chance it is BLUE?`,
+ nums:[r,b],answer:b+"/"+tot,
+ opts:mkOpts(b+"/"+tot,r+"/"+tot,b+"/"+r,"1/"+tot),
+ vis:()=>({html:`<span class="grouprow" style="font-size:26px">${"🔴".repeat(r)}${"🔵".repeat(b)}</span>`,cap:`${tot} marbles in total — ${b} are blue.`}),
+ hint1:`Count ALL the marbles first.`,hint2:`Blue out of total: ${b} out of ${tot}.`,
+ rule:`Chance of blue = ${b}/${tot}. Blue marbles over TOTAL marbles.`};},
+()=>{const S=pick([
+ {q:"The spinner is ALL green. Landing on green is…",a:"certain",w:"It MUST happen — every part is green."},
+ {q:"The spinner has NO red parts at all. Landing on red is…",a:"impossible",w:"It can NEVER happen — there is no red."},
+ {q:"7 of the 8 spinner parts are yellow. Landing on yellow is…",a:"likely",w:"It happens MOST of the time, but not always."},
+ {q:"Only 1 of the 8 spinner parts is purple. Landing on purple is…",a:"unlikely",w:"It CAN happen, but it probably won't."}]);return{
+ text:S.q,nums:[],answer:S.a,opts:mkOpts(S.a,...["certain","likely","unlikely","impossible"].filter(x=>x!==S.a)),
+ vis:()=>({html:`<span class="grouprow" style="font-size:15px;font-weight:800;letter-spacing:0">impossible → unlikely → even chance → likely → certain</span>`,cap:`The chance line — from "never" to "always".`}),
+ hint1:`Think: never, probably not, probably, or always?`,hint2:`Find its spot on the chance line.`,
+ rule:`The answer is "${S.a}". ${S.w}`};},
+()=>{const variant=rand(3);let q,ans,expl,nums;
+ if(variant===0){q="rolling a [6]";ans="1/6";expl="Only one face shows 6, out of six faces.";nums=[6];}
+ else if(variant===1){q="rolling an EVEN number";ans="3/6";expl="2, 4 and 6 are even — three winning faces out of six.";nums=[];}
+ else {q="rolling a number LESS than [3]";ans="2/6";expl="1 and 2 are less than 3 — two winning faces out of six.";nums=[3];}
+ return{text:`You roll one normal dice 🎲. What is the chance of ${q}?`,
+ nums,answer:ans,opts:mkOpts(ans,...["1/6","2/6","3/6","4/6"].filter(x=>x!==ans)),
+ vis:()=>({html:`<span class="grouprow" style="font-size:28px">⚀ ⚁ ⚂ ⚃ ⚄ ⚅</span>`,cap:`A dice has 6 equal faces.`}),
+ hint1:`Count the faces that WIN.`,hint2:`Winning faces over 6.`,
+ rule:`${expl} Chance = ${ans}.`};},
+()=>{const t=4+rand(3);const rA=Math.min(t-1,2+rand(2));const totB=t+2;return{
+ text:`Bag A has [${rA}] red marbles out of [${t}]. Bag B has [1] red out of [${totB}]. Which bag gives a BETTER chance of picking red?`,
+ nums:[rA,t,1,totB],answer:"Bag A",opts:mkOpts("Bag A","Bag B"),
+ vis:()=>({html:`<span class="grouprow" style="font-size:22px">A: ${"🔴".repeat(rA)}${"⚪".repeat(t-rA)}</span><span class="grouprow" style="font-size:22px">B: 🔴${"⚪".repeat(totB-1)}</span>`,cap:`More red out of fewer marbles = a better chance.`}),
+ hint1:`Compare the red share of each bag.`,hint2:`A: ${rA}/${t}.  B: 1/${totB}.`,
+ rule:`Bag A gives ${rA}/${t} and Bag B only 1/${totB} — Bag A is the better chance.`};}
+],
+patt:[
+()=>{const a=2+rand(7),k=3+rand(6);const seq=[a,a+k,a+2*k,a+3*k];return{
+ text:`What comes next: ${seq.join(", ")}, [?]`,
+ nums:[],answer:a+4*k,
+ vis:()=>({html:numberLineSVG([...seq,a+4*k],["+"+k,"+"+k,"+"+k,"+"+k]),cap:`The same jump every time.`}),
+ hint1:`Find the jump between the numbers.`,hint2:`Each step adds ${k}.`,
+ rule:`The rule is +${k}, so ${a+3*k} + ${k} = ${a+4*k}.`};},
+()=>{const a=2+rand(3);const seq=[a,2*a,4*a,8*a];return{
+ text:`What comes next: ${seq.join(", ")}, [?]`,
+ nums:[],answer:16*a,
+ vis:()=>({html:`<span class="grouprow" style="font-size:20px;font-weight:900;letter-spacing:0">${a} ×2→ ${2*a} ×2→ ${4*a} ×2→ ${8*a} ×2→ ?</span>`,cap:`Each number DOUBLES.`}),
+ hint1:`Is the pattern adding… or multiplying?`,hint2:`Each number is double the one before.`,
+ rule:`The rule is ×2, so ${8*a} × 2 = ${16*a}.`};},
+()=>{const c=1+rand(5);const i1=3+rand(4),i2=i1+2,i3=i1+4;const out=x=>2*x+c;return{
+ text:`A number machine: IN ${i1} → OUT ${out(i1)}, and IN ${i2} → OUT ${out(i2)}. What comes OUT when [${i3}] goes IN?`,
+ nums:[i3],answer:out(i3),
+ vis:()=>({html:`<span class="grouprow" style="font-size:18px;font-weight:800;letter-spacing:0">${i1} → ⚙️ → ${out(i1)}</span><span class="grouprow" style="font-size:18px;font-weight:800;letter-spacing:0">${i2} → ⚙️ → ${out(i2)}</span><span class="grouprow" style="font-size:18px;font-weight:900;letter-spacing:0">${i3} → ⚙️ → ?</span>`,cap:`The machine uses the SAME rule every time.`}),
+ hint1:`Try the rule "double, then add something" on both pairs.`,hint2:`Double ${i1} is ${2*i1}; you need ${c} more — the rule is ×2 then +${c}.`,
+ rule:`Rule: ×2 then +${c}. So ${i3} → ${2*i3} + ${c} = ${out(i3)}.`};},
+()=>{const {kid,it}=ctx();const a=3+rand(5),b=2+rand(3),c=4+rand(4);return{
+ text:`${kid} has [${a}] ${it.name}, then buys [${b}] packs with [${c}] in each pack. How many altogether?`,
+ nums:[a,b,c],answer:a+b*c,
+ vis:()=>({html:`<span class="grouprow" style="font-size:24px">${it.emoji.repeat(a)}</span>`+arraySVG(b,c),cap:`${a} loose ones plus ${b} rows of ${c}.`}),
+ hint1:`Work out the packs FIRST: ${b} × ${c}.`,hint2:`${b} × ${c} = ${b*c}. Now add the ${a} loose ones.`,
+ rule:`${a} + ${b} × ${c} = ${a} + ${b*c} = ${a+b*c}. Multiply BEFORE you add!`};}
+]
+};
+function tokenMatches(tok,item){
+  if(typeof item==="number"){const f=parseFloat(tok);return !isNaN(f)&&Math.abs(f-item)<1e-9;}
+  return tok===String(item);
+}
+/*GEN-TEST-END*/
+let mlTopic=store.get("mlTopic","mix"),mlStreakN=0,ml=null,mlTries=0,mlDone=false,mlPicked=new Set();
+function genMaths(){
+  const pool=mlTopic==="mix"?Object.values(GEN).flat():GEN[mlTopic];
+  return pick(pool)();
+}
+function isAns(v){return typeof ml.answer==="string"? v===ml.answer : (typeof v==="number"&&Math.abs(v-ml.answer)<1e-9);}
+function mlShowVisual(){
+  const v=ml.vis();$("mlVisual").innerHTML=v.html;$("mlVisualCaption").textContent=v.cap;
 }
 function mlNew(){
-  ml=genMaths(mlLv);mlTries=0;mlDone=false;mlPicked=new Set();
+  ml=genMaths();mlTries=0;mlDone=false;mlPicked=new Set();
   $("mlFb").className="feedback hidden";
   $("mlHint").classList.add("hidden");
   $("mlNext").classList.add("hidden");
   $("mlHintBtn").classList.remove("hidden");
-  $("mlStep1").classList.remove("hidden");
   $("mlStep2").classList.add("hidden");
   $("mlStep3").classList.add("hidden");
-  $("mlStory").innerHTML=ml.text.replace(/\[(\d+(?:\.\d+)?)\]/g,(m,d)=>{
-    return `<button class="num" data-v="${d}">${d}</button>`;});
-  const btns=[...document.querySelectorAll("#mlStory .num")];
-  btns.forEach((btn,i)=>{
-    btn.dataset.i=i;
-    btn.addEventListener("click",()=>{
-      if(mlDone||!$("mlStep2").classList.contains("hidden"))return;
-      if(mlPicked.has(i)){mlPicked.delete(i);btn.classList.remove("picked");}
-      else {mlPicked.add(i);btn.classList.add("picked");}
+  $("mlStory").innerHTML=ml.text.replace(/\[([\d:.,]+)\]/g,(m,d)=>`<button class="num" data-v="${d}">${d}</button>`)
+    .replace(/\[\?\]/g,'<span class="num" style="cursor:default">?</span>');
+  const btns=[...document.querySelectorAll("#mlStory button.num")];
+  if(btns.length===0){
+    $("mlStep1").classList.add("hidden");
+    $("mlStep2").classList.remove("hidden");
+    mlShowVisual();
+  } else {
+    $("mlStep1").classList.remove("hidden");
+    btns.forEach((btn,i)=>{
+      btn.addEventListener("click",()=>{
+        if(mlDone||!$("mlStep2").classList.contains("hidden"))return;
+        if(mlPicked.has(i)){mlPicked.delete(i);btn.classList.remove("picked");}
+        else {mlPicked.add(i);btn.classList.add("picked");}
+      });
     });
-  });
+  }
   mlHud();
 }
 $("mlCheckNums").addEventListener("click",()=>{
   if(!$("mlStep2").classList.contains("hidden"))return;
-  const numBtns=[...document.querySelectorAll("#mlStory .num")];
+  const numBtns=[...document.querySelectorAll("#mlStory button.num")];
   const needed=new Set();
   const pool=[...ml.nums];
   numBtns.forEach((b,i)=>{
-    const v=parseFloat(b.dataset.v);
-    const at=pool.findIndex(x=>Math.abs(x-v)<1e-9);
+    const at=pool.findIndex(x=>tokenMatches(b.dataset.v,x));
     if(at>-1){needed.add(i);pool.splice(at,1);}
   });
   let allRight=mlPicked.size>0;
@@ -1030,29 +1341,30 @@ $("mlCheckNums").addEventListener("click",()=>{
   } else {
     fb.className="feedback try";
     $("mlFbHead").textContent="Good try! The green numbers are the important ones.";
-    $("mlFbRule").textContent=ml.hasDistractor?
-      "Watch out — some numbers are tricksters that we don't need!":
-      "The numbers we need are highlighted in green.";
+    $("mlFbRule").textContent="The numbers we need are highlighted in green.";
   }
   $("mlStep1").classList.add("hidden");
-  setTimeout(()=>{fb.className="feedback hidden";$("mlStep2").classList.remove("hidden");
-    const v=ml.vis();$("mlVisual").innerHTML=v.html;$("mlVisualCaption").textContent=v.cap;},1600);
+  setTimeout(()=>{fb.className="feedback hidden";$("mlStep2").classList.remove("hidden");mlShowVisual();},1600);
 });
 $("mlToStep3").addEventListener("click",()=>{
   $("mlStep2").classList.add("hidden");
   $("mlStep3").classList.remove("hidden");
   const area=$("mlAns");area.innerHTML="";
   const fmt=ml.fmt||fmtNum;
-  const set=[ml.answer];
-  let guard=0;
-  const isMoneyDecimal=!Number.isInteger(ml.answer);
-  while(set.length<4&&guard<50){guard++;
-    const d=ml.answer+(isMoneyDecimal?pick([-1,-0.5,0.5,1,1.5]):pick([-4,-3,-2,-1,1,2,3,4]));
-    if(d>0&&!set.some(x=>Math.abs(x-d)<1e-9))set.push(d);
+  let list;
+  if(ml.opts){list=[...ml.opts];}
+  else{
+    const set=[ml.answer];let guard=0;
+    const dec=!Number.isInteger(ml.answer);
+    while(set.length<4&&guard<60){guard++;
+      const d=ml.answer+(dec?pick([-1,-0.5,0.5,1,1.5]):pick([-4,-3,-2,-1,1,2,3,4]));
+      if(d>0&&!set.some(x=>Math.abs(x-d)<1e-9))set.push(d);}
+    list=shuffle(set);
   }
-  shuffle(set).forEach(v=>{
-    const b=document.createElement("button");b.className="ans-btn";b.textContent=fmt(v);
-    b.dataset.v=v;
+  list.forEach(v=>{
+    const b=document.createElement("button");b.className="ans-btn";
+    b.textContent=typeof v==="string"?v:fmt(v);
+    if(isAns(v))b.dataset.correct="1";
     b.addEventListener("click",()=>mlAnswer(v,b));
     area.appendChild(b);
   });
@@ -1060,17 +1372,16 @@ $("mlToStep3").addEventListener("click",()=>{
 function mlAnswer(v,btn){
   if(mlDone)return;
   const fb=$("mlFb");
-  if(Math.abs(v-ml.answer)<1e-9){
+  if(isAns(v)){
     mlDone=true;btn.classList.add("right");
-    document.querySelectorAll(".ans-btn").forEach(b=>b.disabled=true);
-    const gained=mlTries===0?Math.min(mlLv+1,4):1;
+    document.querySelectorAll("#mlAns .ans-btn").forEach(b=>b.disabled=true);
+    const gained=mlTries===0?3:1;
     addStars(gained);addSolved();
     fb.className="feedback good";
     $("mlFbHead").textContent=pick(PRAISE)+"  +"+gained+" ★";
     $("mlFbRule").innerHTML="<b>🔑 "+ml.rule+"</b>";
     mlStreakN++;
-    if(mlStreakN>=3&&mlLv<6){mlLv++;store.set("mlLv",mlLv);mlStreakN=0;
-      $("mlFbRule").innerHTML+="<br><b style='color:#8a6400'>🎉 3 in a row — LEVEL UP to "+YRLBL[mlLv]+"!</b>";}
+    if(mlStreakN>0&&mlStreakN%5===0)$("mlFbRule").innerHTML+="<br><b style='color:#8a6400'>🔥 "+mlStreakN+" in a row — you're on fire!</b>";
     $("mlNext").classList.remove("hidden");$("mlHintBtn").classList.add("hidden");
   } else if(mlTries===0){
     mlTries=1;addMistake();
@@ -1080,9 +1391,8 @@ function mlAnswer(v,btn){
     $("mlFbRule").textContent="Look at the picture again — it never lies! Or press 💡 Hint.";
   } else {
     mlDone=true;addMistake();mlStreakN=0;
-    document.querySelectorAll(".ans-btn").forEach(b=>{
-      b.disabled=true;
-      if(Math.abs(parseFloat(b.dataset.v)-ml.answer)<1e-9)b.classList.add("right");});
+    document.querySelectorAll("#mlAns .ans-btn").forEach(b=>{
+      b.disabled=true;if(b.dataset.correct)b.classList.add("right");});
     btn.classList.add("wrongpick");
     fb.className="feedback learn";
     $("mlFbHead").textContent=pick(LEARN);
@@ -1095,19 +1405,20 @@ $("mlHintBtn").addEventListener("click",()=>{
   const h=$("mlHint");h.textContent="💡 "+(mlTries===0?ml.hint1:ml.hint2);h.classList.remove("hidden");});
 $("mlNext").addEventListener("click",mlNew);
 function mlHud(){
-  $("mlLevel").textContent="Level "+mlLv+" · "+YRLBL[mlLv];
-  $("mlStreak").textContent="Streak: "+mlStreakN+" / 3 — get 3 in a row to LEVEL UP!";
+  const t=TOPICS.find(x=>x.id===mlTopic)||TOPICS[0];
+  $("mlLevel").textContent=t.lbl;
+  $("mlStreak").textContent="Streak: "+mlStreakN+(mlStreakN>=3?" 🔥":"")+" — pick a topic below or play Mixed!";
   document.querySelectorAll("#mlLvRow .btn-line").forEach(b=>
-    b.classList.toggle("on",+b.dataset.mlv===mlLv));
+    b.classList.toggle("on",b.dataset.mlv===mlTopic));
 }
-(function buildMlLvRow(){
+(function buildMlTopicRow(){
   const row=$("mlLvRow");
-  for(let l=1;l<=6;l++){
-    const b=document.createElement("button");b.className="btn-line";b.dataset.mlv=l;
-    b.textContent="L"+l+" · "+YRLBL[l];
-    b.addEventListener("click",()=>{mlLv=l;store.set("mlLv",l);mlStreakN=0;mlNew();});
+  TOPICS.forEach(t=>{
+    const b=document.createElement("button");b.className="btn-line";b.dataset.mlv=t.id;
+    b.textContent=t.lbl;
+    b.addEventListener("click",()=>{mlTopic=t.id;store.set("mlTopic",t.id);mlStreakN=0;mlNew();});
     row.appendChild(b);
-  }
+  });
 })();
 
 /* ═══════════ WORD WIZARD ═══════════ */
@@ -1132,6 +1443,26 @@ const WORDS=[
 ["powerful",1,"💪","very strong","A crocodile has ___ jaws."],
 ["silent",1,"🤫","with no sound at all","The library was completely ___."],
 ["valuable",1,"💎","worth a lot","Grandma's ring is very ___."],
+["delicious",1,"😋","tastes really good","This pizza smells ___!"],
+["whisper",1,"🗣️","to speak very quietly","Please ___ in the library."],
+["grumpy",1,"😾","in a bad mood","Dad is ___ before his morning coffee."],
+["soggy",1,"💦","wet and soft","My cereal went ___ in the milk."],
+["sturdy",1,"🪑","strong and well made","This old chair is still ___."],
+["dazzling",1,"✨","so bright it amazes you","The fireworks were ___."],
+["filthy",1,"🧦","very dirty","Your soccer boots are ___!"],
+["chilly",1,"🧊","a little bit cold","Take a jumper — it's ___ tonight."],
+["gigantic",1,"🦕","extremely big","A ___ dinosaur skeleton stood in the museum."],
+["tiny",1,"🐜","very, very small","An ant looks ___ next to your shoe."],
+["chase",1,"🏃","to run after","Dogs love to ___ balls."],
+["stumble",1,"🪨","to trip while walking","Try not to ___ on that rock."],
+["gaze",1,"🌠","to look at something for a long time","We lay down to ___ at the stars."],
+["mend",1,"🪡","to fix something broken","Grandma can ___ the ripped sleeve."],
+["borrow",1,"📚","to use something and give it back later","Can I ___ your pencil?"],
+["vanish",1,"🎩","to disappear suddenly","The magician made the rabbit ___."],
+["tremble",1,"🥶","to shake with cold or fear","The puppy began to ___ in the storm."],
+["dash",1,"💨","to run somewhere quickly","We had to ___ to catch the bus."],
+["snatch",1,"🫳","to grab something quickly","The seagull tried to ___ my chip!"],
+["wander",1,"🚶","to walk around with no plan","We like to ___ around the market."],
 ["astonished",2,"😲","very, very surprised","Elena was ___ to see snow in Sydney."],
 ["cautious",2,"⚠️","very careful","Be ___ when you cross the road."],
 ["convince",2,"🗣️","to make someone agree","I tried to ___ Mum to get a puppy."],
@@ -1152,27 +1483,88 @@ const WORDS=[
 ["temporary",2,"⏳","only for a short time","The bridge closure is ___."],
 ["transparent",2,"🪟","you can see through it","Glass is ___."],
 ["vast",2,"🌌","extremely big and wide","The outback is a ___, empty land."],
-["abundant",3,"🍇","more than enough; plenty","Mangoes are ___ in summer."],
-["accurate",3,"🎯","exactly right","Your measurements must be ___."],
-["analyse",3,"📊","to study something carefully","Scientists ___ the test results."],
-["anticipate",3,"⏰","to expect something before it happens","We ___ a big crowd at the show."],
-["benefit",3,"➕","something good you get","One ___ of exercise is stronger muscles."],
-["conclusion",3,"🏁","what you decide at the end","Write your ___ at the end of the report."],
-["consequence",3,"⛓️","what happens because of an action","Missing the bus was a ___ of sleeping in."],
-["contrast",3,"⚖️","to show how things are different","The essay ___s city life and farm life."],
-["essential",3,"❗","absolutely necessary","Water is ___ for all living things."],
-["evidence",3,"🔎","facts that show something is true","The detective searched for ___."],
-["exaggerate",3,"🎈","to make something sound bigger than it is","He likes to ___ how big the fish was."],
-["inevitable",3,"🌅","certain to happen","Sunset is ___ every day."],
-["influence",3,"🧲","to change how someone thinks or acts","Friends can ___ our choices."],
-["persuade",3,"🤝","to talk someone into something","She tried to ___ the class to vote for her."],
-["priority",3,"🥇","the most important thing","Homework is my first ___ tonight."],
-["reliable",3,"⚓","can be trusted","Our old car is slow but ___."],
-["significant",3,"⭐","important; big enough to matter","The team made a ___ improvement."],
-["summarise",3,"📝","to tell the main points briefly","Can you ___ the chapter in three sentences?"],
-["vary",3,"🌈","to change; to be different","Prices ___ from shop to shop."],
-["versatile",3,"🧰","useful in many different ways","Eggs are a ___ food."]
+["abundant",2,"🍇","more than enough; plenty","Mangoes are ___ in summer."],
+["accurate",2,"🎯","exactly right","Your measurements must be ___."],
+["analyse",2,"📊","to study something carefully","Scientists ___ the test results."],
+["anticipate",2,"⏰","to expect something before it happens","We ___ a big crowd at the show."],
+["benefit",2,"➕","something good you get","One ___ of exercise is stronger muscles."],
+["conclusion",2,"🏁","what you decide at the end","Write your ___ at the end of the report."],
+["consequence",2,"⛓️","what happens because of an action","Missing the bus was a ___ of sleeping in."],
+["contrast",2,"⚖️","to show how things are different","The essay ___s city life and farm life."],
+["essential",2,"❗","absolutely necessary","Water is ___ for all living things."],
+["evidence",2,"🔎","facts that show something is true","The detective searched for ___."],
+["exaggerate",2,"🎈","to make something sound bigger than it is","He likes to ___ how big the fish was."],
+["inevitable",2,"🌅","certain to happen","Sunset is ___ every day."],
+["influence",2,"🧲","to change how someone thinks or acts","Friends can ___ our choices."],
+["persuade",2,"🤝","to talk someone into something","She tried to ___ the class to vote for her."],
+["priority",2,"🥇","the most important thing","Homework is my first ___ tonight."],
+["reliable",2,"⚓","can be trusted","Our old car is slow but ___."],
+["significant",2,"⭐","important; big enough to matter","The team made a ___ improvement."],
+["summarise",2,"📝","to tell the main points briefly","Can you ___ the chapter in three sentences?"],
+["vary",2,"🌈","to change; to be different","Prices ___ from shop to shop."],
+["versatile",2,"🧰","useful in many different ways","Eggs are a ___ food."],
+["approach",2,"🚪","to move closer to","Walk slowly as you ___ the horse."],
+["assume",2,"🤔","to think something is true without checking","Don't ___ the shop is open — call first."],
+["compare",2,"🔍","to look at how things are alike or different","Let's ___ the two bikes before buying one."],
+["define",2,"📖","to say exactly what a word means","Can you ___ the word 'habitat'?"],
+["describe",2,"🖼️","to say what something is like","___ your dream bedroom to me."],
+["estimate",2,"🤏","to make a careful guess","___ how many lollies are in the jar."],
+["explain",2,"💬","to make something clear","Please ___ how you solved the problem."],
+["identify",2,"🏷️","to say what something is","Can you ___ this bird?"],
+["locate",2,"📍","to find where something is","Use the map to ___ the treasure."],
+["observe",2,"👀","to watch carefully","Scientists ___ the ants for hours."],
+["occur",2,"📅","to happen","High tides ___ twice a day."],
+["previous",2,"⏮️","the one before","Check your ___ answer first."],
+["process",2,"⚙️","the steps for doing something","Making bread is a slow ___."],
+["purpose",2,"🎯","the reason for something","The ___ of a helmet is to protect your head."],
+["recall",2,"🧠","to remember","Can you ___ what we learned yesterday?"],
+["require",2,"📋","to need","Plants ___ sunlight to grow."],
+["respond",2,"↩️","to answer","Please ___ to the invitation by Friday."],
+["select",2,"☑️","to choose","___ your favourite colour."],
+["source",2,"🏞️","where something comes from","The river's ___ is high in the mountains."],
+["structure",2,"🏗️","how something is built or organised","A spider web has an amazing ___."],
+["evaporation",3,"☀️","liquid turning into gas","Puddles disappear because of ___."],
+["condensation",3,"💧","gas turning into liquid drops","___ forms on a cold glass of water."],
+["ecosystem",3,"🌏","living things and their home working together","A pond is a small ___."],
+["habitat",3,"🏞️","the natural home of an animal","The reef is a clownfish's ___."],
+["predator",3,"🦈","an animal that hunts other animals","The eagle is a powerful ___."],
+["prey",3,"🐁","an animal that gets hunted","Mice are ___ for owls."],
+["photosynthesis",3,"🌿","how plants make food from sunlight","Leaves use sunlight for ___."],
+["gravity",3,"🍎","the force that pulls things down","___ makes the apple fall to the ground."],
+["friction",3,"🛷","the force that slows sliding things","Rough ground makes more ___."],
+["energy",3,"⚡","the power to make things move or work","Food gives your body ___."],
+["continent",3,"🗺️","one of Earth's seven big lands","Australia is both a country and a ___."],
+["equator",3,"🌍","the imaginary line around Earth's middle","It is hot near the ___."],
+["hemisphere",3,"🌗","one half of the Earth","Australia is in the southern ___."],
+["climate",3,"🌦️","the usual weather of a place","Deserts have a hot, dry ___."],
+["population",3,"👥","how many people live in a place","Sydney has a large ___."],
+["government",3,"🏛️","the group of people who run a country","The ___ makes laws for everyone."],
+["democracy",3,"🗳️","a system where the people vote","In a ___, every vote counts."],
+["parliament",3,"🏢","where laws are discussed and made","___ House is in Canberra."],
+["ancestor",3,"👴","a family member from long ago","My ___s came from Korea."],
+["tradition",3,"🎎","something special passed down in families","Eating together on New Year is our ___."],
+["perimeter",3,"📐","the distance around a shape","Walk the ___ of the oval."],
+["area",3,"🟩","the space inside a shape","Measure the ___ of the rug."],
+["parallel",3,"🛤️","lines that never meet","Train tracks are ___ lines."],
+["vertex",3,"📍","the corner point of a shape","Each corner of a shape is called a ___."],
+["numerator",3,"🔼","the top number of a fraction","In 3/4, the 3 is the ___."],
+["denominator",3,"🔽","the bottom number of a fraction","In 3/4, the 4 is the ___."],
+["probability",3,"🎲","how likely something is to happen","The ___ of flipping heads is one half."],
+["symmetry",3,"🦋","matching halves","A butterfly's wings show ___."],
+["temperature",3,"🌡️","how hot or cold something is","Check the water ___ before you swim."],
+["volume",3,"🧊","how much space something fills","Find the ___ of the box."],
+["mass",3,"⚖️","how much matter is in something","We measure ___ in kilograms."],
+["circuit",3,"🔋","the loop that electricity flows around","The bulb lights up when the ___ is complete."],
+["magnet",3,"🧲","pulls some metals towards it","A ___ picks up paper clips."],
+["mineral",3,"💎","a natural material from the ground","Gold is a precious ___."],
+["volcano",3,"🌋","a mountain that can erupt","Hot lava flowed from the ___."],
+["earthquake",3,"🫨","when the ground shakes","The ___ rattled the windows."],
+["erosion",3,"🏜️","land being worn away by wind or water","Waves cause ___ on the cliffs."],
+["pollution",3,"🏭","harmful stuff in the air, water or land","Rubbish causes ___ in our rivers."],
+["recycle",3,"♻️","to use materials again","We ___ paper, cans and bottles."],
+["flood",3,"🌊","too much water covering the land","Heavy rain caused a ___ in the valley."]
 ].map(a=>({w:a[0],t:a[1],e:a[2],d:a[3],s:a[4]}));
+
 
 let wwLv=store.get("wwLv",1),wwStreakN=0,ww=null,wwTries=0,wwDone=false;
 let wwLearned=new Set(store.get("wwLearned",[]));
@@ -1261,7 +1653,7 @@ $("wwNext").addEventListener("click",wwNew);
 document.querySelectorAll("[data-wlv]").forEach(b=>b.addEventListener("click",()=>{
   wwLv=+b.dataset.wlv;store.set("wwLv",wwLv);wwStreakN=0;wwNew();}));
 function wwHud(){
-  const lbl={1:"Yr 3–4",2:"Yr 5",3:"Yr 6"};
+  const lbl={1:"Tier 1 · everyday",2:"Tier 2 · academic",3:"Tier 3 · subjects"};
   $("wwLevel").textContent="Level "+wwLv+" · "+lbl[wwLv];
   $("wwLearned").textContent="📚 "+wwLearned.size+" words";
   $("wwStreak").textContent="Streak: "+wwStreakN+" / 3 — get 3 in a row to LEVEL UP!";
@@ -1529,8 +1921,65 @@ function renderGarden(){
     `<span style="color:#4a7d55;font-weight:700">Mistakes water the garden — that's how everything grows! 🌱</span>`;
 }
 
+/* ═══════════ profiles UI ═══════════ */
+function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function renderProfChip(){const p=curProf();$("profChip").textContent=p?"👤 "+p+" · switch player":"👤 choose player";}
+function renderProfiles(){
+  const list=$("profList");list.innerHTML="";
+  const profs=getProfiles();
+  if(!profs.length)list.innerHTML='<div style="color:var(--sub);font-size:14px;padding:4px 2px">No players yet — type a name below to start!</div>';
+  profs.forEach(name=>{
+    const b=document.createElement("button");b.className="game-card";
+    b.innerHTML='<span class="emoji">'+(name===curProf()?"⭐":"🧒")+'</span><span><span class="t">'+escapeHtml(name)+'</span><span class="d">'+(name===curProf()?"playing now":"tap to play")+'</span></span>';
+    b.addEventListener("click",()=>{try{localStorage.setItem(PKEY,name);}catch(e){}location.reload();});
+    list.appendChild(b);
+  });
+  $("profMsg").textContent="";
+}
+$("profAdd").addEventListener("click",()=>{
+  const name=($("profName").value||"").trim().slice(0,16);
+  if(!name)return;
+  const profs=getProfiles();
+  if(!profs.includes(name)){profs.push(name);saveProfiles(profs);}
+  try{localStorage.setItem(PKEY,name);}catch(e){}
+  location.reload();
+});
+function exportCode(){
+  const prof=curProf();if(!prof)return "";
+  const pre="ebg_"+prof+"_",data={};
+  try{for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);
+    if(k&&k.indexOf(pre)===0)data[k.slice(pre.length)]=localStorage.getItem(k);}}catch(e){}
+  return btoa(unescape(encodeURIComponent(JSON.stringify({n:prof,d:data}))));
+}
+$("expBtn").addEventListener("click",()=>{
+  const code=exportCode();const box=$("codeBox");
+  $("impConfirmRow").classList.add("hidden");
+  box.classList.remove("hidden");box.value=code;box.select();
+  if(navigator.clipboard&&code)navigator.clipboard.writeText(code).catch(()=>{});
+  $("profMsg").textContent=code?"Backup code ready — it has been selected and copied. Paste it on the other device.":"Choose a player first!";
+});
+$("impBtn").addEventListener("click",()=>{
+  const box=$("codeBox");box.classList.remove("hidden");box.value="";box.focus();
+  $("impConfirmRow").classList.remove("hidden");
+  $("profMsg").textContent="Paste the backup code above, then press Restore.";
+});
+$("impGo").addEventListener("click",()=>{
+  try{
+    const obj=JSON.parse(decodeURIComponent(escape(atob($("codeBox").value.trim()))));
+    if(!obj||typeof obj.n!=="string"||typeof obj.d!=="object"||obj.d===null)throw 0;
+    const name=obj.n.slice(0,16)||"Player";
+    const profs=getProfiles();if(!profs.includes(name)){profs.push(name);saveProfiles(profs);}
+    Object.keys(obj.d).forEach(k=>{const v=obj.d[k];
+      if(typeof v==="string"){try{localStorage.setItem("ebg_"+name+"_"+k,v);}catch(e){}}});
+    localStorage.setItem(PKEY,name);
+    location.reload();
+  }catch(e){$("profMsg").textContent="Hmm, that code doesn't look right — make sure you copied the WHOLE code, then try again.";}
+});
 /* ═══════════ init ═══════════ */
 refreshStars();
+renderProfChip();
+$("profChip").addEventListener("click",()=>show("profile"));
+if(!curProf())show("profile");
 </script>
 </body>
 </html>
